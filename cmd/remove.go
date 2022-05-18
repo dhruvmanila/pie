@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +22,10 @@ associated with that name is removed instead.
 	Aliases: []string{"rm"},
 	Args:    cobra.MaximumNArgs(1),
 	Run: func(_ *cobra.Command, args []string) {
-		dataDir := dataDir()
+		dataDir, err := xdg.DataFile("pyvenv/")
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		venvName, err := getVenvNameFromArgs(args)
 		if err != nil {

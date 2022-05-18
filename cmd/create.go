@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/adrg/xdg"
 	"github.com/dhruvmanila/pyvenv/internal/python"
 	"github.com/spf13/cobra"
 )
@@ -27,7 +28,10 @@ provided, then the project name will be used.
 `,
 	Args: cobra.MaximumNArgs(1),
 	Run: func(_ *cobra.Command, args []string) {
-		dataDir := dataDir()
+		dataDir, err := xdg.DataFile("pyvenv/")
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		venvName, err := getVenvNameFromArgs(args)
 		if err != nil {
@@ -36,7 +40,7 @@ provided, then the project name will be used.
 
 		venvDir := filepath.Join(dataDir, venvName)
 		if stat, err := os.Stat(venvDir); err == nil && stat.IsDir() {
-			log.Fatalf("%s: venv exists for project", venvName)
+			log.Fatalf("%q: venv exists for project", venvName)
 		} else if errors.Is(err, fs.ErrNotExist) {
 			if err = python.CreateVenv(pythonVersion, venvName); err != nil {
 				log.Fatal(err)

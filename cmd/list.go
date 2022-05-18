@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +15,10 @@ var listCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Args:    cobra.NoArgs,
 	Run: func(_ *cobra.Command, _ []string) {
-		dataDir := dataDir()
+		dataDir, err := xdg.DataFile("pyvenv/")
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		entries, err := os.ReadDir(dataDir)
 		if err != nil {
