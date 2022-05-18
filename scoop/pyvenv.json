@@ -1,32 +1,22 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScoopInstaller/Scoop/master/schema.json",
-  "version": "0.0.3",
-  "description": "Personal tool for managing Python virtual environments.",
-  "homepage": "https://github.com/dhruvmanila/pyvenv",
-  "license": "MIT",
-  "architecture": {
-    "64bit": {
-      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.3/pyvenv-0.0.3-windows-amd64.zip",
-      "hash": "f4eb63b392504e108f4589f98c44f0dc8d4250f7cdb8e099b3fa6269991c2e3d"
-    },
-    "32bit": {
-      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.3/pyvenv-0.0.3-windows-386.zip",
-      "hash": "b40689e61610f354bd00d1a37e2e9b754450601a6baf924cb1bd43d6f2b69b95"
-    }
-  },
-  "bin": "pyvenv.exe",
-  "checkver": "github",
-  "autoupdate": {
+    "version": "0.0.6",
     "architecture": {
-      "64bit": {
-        "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v$version/pyvenv-$version-windows-amd64.zip"
-      },
-      "32bit": {
-        "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v$version/pyvenv-$version-windows-386.zip"
-      }
+        "32bit": {
+            "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.6/pyvenv-0.0.6-windows-386.zip",
+            "bin": [
+                "pyvenv.exe"
+            ],
+            "hash": "51a1bfc1970bcfeb78b18b7e60b9bfd090a92a48ac844f408a52ed5771afa063"
+        },
+        "64bit": {
+            "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.6/pyvenv-0.0.6-windows-amd64.zip",
+            "bin": [
+                "pyvenv.exe"
+            ],
+            "hash": "9dafd6ae0bd4dbe616d100dfb13f116f3f1961a5187f4d12895e137122035210"
+        }
     },
-    "hash": {
-      "url": "$basurl/checksums.txt"
-    }
-  }
+    "homepage": "https://github.com/dhruvmanila/pyvenv",
+    "license": "MIT",
+    "description": "Personal tool for managing Python virtual environments."
 }
