@@ -40,3 +40,10 @@ changelog:
       - "^test:"
       - Merge pull request
       - Merge branch
+
+scoop:
+  folder: scoop
+  commit_msg_template: "chore(scoop): update to version {{ .Tag }}"
+  homepage: https://github.com/dhruvmanila/pyvenv
+  description: Personal tool for managing Python virtual environments.
+  license: MIT
