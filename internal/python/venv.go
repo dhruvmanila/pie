@@ -39,13 +39,15 @@ func executeCommand(cmd *exec.Cmd) error {
 // This will store all the virtual environments in `XDG_DATA_HOME` directory.
 // It will use the builtin `venv` module to create the virtual environment.
 func CreateVenv(version string, name string) error {
-	pythonExec, err := VersionLookup(version)
+	pythonExec, pythonVersion, err := VersionLookup(version)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Using %s to create virtualenv...\n",
-		color.New(color.FgYellow, color.Bold).Sprint(pythonExec))
+	fmt.Printf("Using %s %s to create virtualenv...\n",
+		color.New(color.FgYellow, color.Bold).Sprint(pythonExec),
+		color.GreenString("(%s)", pythonVersion),
+	)
 
 	dir, err := xdg.DataFile("pyvenv/")
 	if err != nil {

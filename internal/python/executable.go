@@ -34,7 +34,7 @@ func constructCommandName(version string) string {
 }
 
 // VersionLookup searches for the Python executable for the given version
-// and returns the absolute path to the file.
+// and returns the absolute path to the executable and the version string.
 //
 // If no version is provided, then the global Python executable will be used.
 // The lookup is based on the major and minor parts of the version and if
@@ -44,23 +44,15 @@ func constructCommandName(version string) string {
 // If it's unable to find an exectuable that matches the given version, the
 // error is of type *VersionNotFoundError. Other error types may be returned
 // for other situations.
-func VersionLookup(version string) (string, error) {
+func VersionLookup(version string) (string, string, error) {
 	cmd := exec.Command(constructCommandName(version), "--version")
 
 	output, err := cmd.Output()
 	if err != nil {
 		if errors.Is(err, exec.ErrNotFound) {
-			return "", &VersionNotFoundError{version}
+			return "", "", &VersionNotFoundError{version}
 		}
-		return "", err
-	}
-
-	realpath, err := filepath.EvalSymlinks(cmd.Path)
-	if err != nil {
-		return "", err
-	}
-	if version == "" {
-		return realpath, nil
+		return "", "", err
 	}
 
 	// Output: "Python <version><LF/CRLF>"
@@ -68,9 +60,14 @@ func VersionLookup(version string) (string, error) {
 	actualVersion = strings.TrimRightFunc(actualVersion, func(r rune) bool {
 		return r == '\n' || r == '\r'
 	})
-	if version != actualVersion {
-		return "", &VersionNotFoundError{version}
+	if version != "" && version != actualVersion {
+		return "", "", &VersionNotFoundError{version}
 	}
 
-	return realpath, nil
+	realpath, err := filepath.EvalSymlinks(cmd.Path)
+	if err != nil {
+		return "", "", err
+	}
+
+	return realpath, actualVersion, nil
 }
