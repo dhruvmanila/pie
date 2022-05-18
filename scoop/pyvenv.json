@@ -6,11 +6,11 @@
   "license": "MIT",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.2/pyvenv-0.0.2-windows-amd64.tar.gz",
+      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.2/pyvenv-0.0.2-windows-amd64.zip",
       "hash": "ec19398c5e57669926ecd99226fcb651c220fa605ed279530b23c15cf792a004"
     },
     "32bit": {
-      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.2/pyvenv-0.0.2-windows-386.tar.gz",
+      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.2/pyvenv-0.0.2-windows-386.zip",
       "hash": "dc77cf4a2032701d9b0f2f4aba6a554cb33335ea0cc8a8ea161a31be85213468"
     }
   },
@@ -19,10 +19,10 @@
   "autoupdate": {
     "architecture": {
       "64bit": {
-        "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v$version/pyvenv-$version-windows-amd64.tar.gz"
+        "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v$version/pyvenv-$version-windows-amd64.zip"
       },
       "32bit": {
-        "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v$version/pyvenv-$version-windows-386.tar.gz"
+        "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v$version/pyvenv-$version-windows-386.zip"
       }
     },
     "hash": {
