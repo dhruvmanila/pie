@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -28,6 +29,8 @@ provided, then the project name will be used.
 `,
 	Args: cobra.MaximumNArgs(1),
 	Run: func(_ *cobra.Command, args []string) {
+		bold.Println("==> Creating a virtualenv for this project...")
+
 		dataDir, err := xdg.DataFile("pyvenv/")
 		if err != nil {
 			log.Fatal(err)
@@ -40,10 +43,13 @@ provided, then the project name will be used.
 
 		venvDir := filepath.Join(dataDir, venvName)
 		if stat, err := os.Stat(venvDir); err == nil && stat.IsDir() {
-			log.Fatalf("%q: venv exists for project", venvName)
+			log.Fatal(red.Sprintf("✘ Virtualenv already exists for this project: %s", venvName))
 		} else if errors.Is(err, fs.ErrNotExist) {
 			if err = python.CreateVenv(pythonVersion, venvName); err != nil {
 				log.Fatal(err)
+			} else {
+				green.Println("✔ Successfully created virtual environment!")
+				fmt.Printf("Virtualenv location: %s\n", green.Sprint(venvDir))
 			}
 		} else if err != nil {
 			log.Fatal(err)

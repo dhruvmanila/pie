@@ -19,6 +19,7 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
+		fmt.Printf("Virtualenvs location: %s\n", green.Sprint(dataDir))
 
 		entries, err := os.ReadDir(dataDir)
 		if err != nil {
@@ -27,7 +28,7 @@ var listCmd = &cobra.Command{
 
 		for _, entry := range entries {
 			if entry.IsDir() {
-				fmt.Println(entry.Name())
+				bold.Println("  " + entry.Name())
 			}
 		}
 	},

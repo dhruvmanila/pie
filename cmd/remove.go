@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -33,12 +34,15 @@ associated with that name is removed instead.
 		}
 
 		venvDir := filepath.Join(dataDir, venvName)
+		fmt.Printf("Virtualenv location: %s\n", green.Sprint(venvDir))
 		if stat, err := os.Stat(venvDir); err == nil && stat.IsDir() {
 			if err = os.RemoveAll(venvDir); err != nil {
 				log.Fatal(err)
+			} else {
+				green.Println("✔ Successfully removed virtual environment!")
 			}
 		} else if errors.Is(err, fs.ErrNotExist) {
-			log.Fatalf("%s: venv does not exist", venvName)
+			log.Fatal(red.Sprintf("✘ Virtualenv %q does not exist!", venvName))
 		} else if err != nil {
 			log.Fatal(err)
 		}

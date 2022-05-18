@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/adrg/xdg"
+	"github.com/fatih/color"
 )
 
 // executeCommand will execute the given command returning any error faced
@@ -42,6 +43,9 @@ func CreateVenv(version string, name string) error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Printf("Using %s to create virtualenv...\n",
+		color.New(color.FgYellow, color.Bold).Sprint(pythonExec))
 
 	dir, err := xdg.DataFile("pyvenv/")
 	if err != nil {

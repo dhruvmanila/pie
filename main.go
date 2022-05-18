@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	log.SetPrefix("pyvenv: ")
 	log.SetFlags(0)
 
 	cmd.Execute()
