@@ -1,17 +1,17 @@
 {
   "$schema": "https://raw.githubusercontent.com/ScoopInstaller/Scoop/master/schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Personal tool for managing Python virtual environments.",
   "homepage": "https://github.com/dhruvmanila/pyvenv",
   "license": "MIT",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.2/pyvenv-0.0.2-windows-amd64.zip",
-      "hash": "ec19398c5e57669926ecd99226fcb651c220fa605ed279530b23c15cf792a004"
+      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.3/pyvenv-0.0.3-windows-amd64.zip",
+      "hash": "f4eb63b392504e108f4589f98c44f0dc8d4250f7cdb8e099b3fa6269991c2e3d"
     },
     "32bit": {
-      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.2/pyvenv-0.0.2-windows-386.zip",
-      "hash": "dc77cf4a2032701d9b0f2f4aba6a554cb33335ea0cc8a8ea161a31be85213468"
+      "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.0.3/pyvenv-0.0.3-windows-386.zip",
+      "hash": "b40689e61610f354bd00d1a37e2e9b754450601a6baf924cb1bd43d6f2b69b95"
     }
   },
   "bin": "pyvenv.exe",
