@@ -29,9 +29,6 @@ checksum:
 snapshot:
   name_template: "snapshot-{{ .Commit }}"
 
-release:
-  draft: true
-
 changelog:
   sort: asc
   filters:
