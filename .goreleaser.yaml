@@ -42,6 +42,9 @@ changelog:
       - Merge branch
 
 scoop:
+  bucket:
+    owner: dhruvmanila
+    name: pyvenv
   folder: scoop
   commit_msg_template: "chore(scoop): update to version {{ .Tag }}"
   homepage: https://github.com/dhruvmanila/pyvenv
