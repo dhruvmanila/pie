@@ -8,17 +8,6 @@ import (
 	"strings"
 )
 
-// VersionNotFoundError is returned by VersionLookup when it fails
-// to find an executable for the provided Python version.
-type VersionNotFoundError struct {
-	// Version is the Python version for which the error occurred.
-	Version string
-}
-
-func (e *VersionNotFoundError) Error() string {
-	return e.Version + ": version does not exist"
-}
-
 // ExecInfo contains information about the Python executable.
 type ExecInfo struct {
 	// Path is the absolute path to the executable file.
