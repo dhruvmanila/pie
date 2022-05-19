@@ -3,13 +3,16 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"io"
 	"io/fs"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/adrg/xdg"
 	"github.com/dhruvmanila/pyvenv/internal/python"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -45,7 +48,10 @@ provided, then the project name will be used.
 		if stat, err := os.Stat(venvDir); err == nil && stat.IsDir() {
 			log.Fatal(red.Sprintf("✘ Virtualenv already exists for this project: %s", venvName))
 		} else if errors.Is(err, fs.ErrNotExist) {
-			if err = python.CreateVenv(pythonVersion, venvName); err != nil {
+			if err = createVenv(venvDir); err != nil {
+				if _, ok := err.(*python.VersionNotFoundError); ok {
+					log.Fatal(red.Sprintf("✘ Python version %s does not exist!", pythonVersion))
+				}
 				log.Fatal(err)
 			} else {
 				green.Println("✔ Successfully created virtual environment!")
@@ -60,4 +66,36 @@ provided, then the project name will be used.
 func init() {
 	rootCmd.AddCommand(createCmd)
 	createCmd.Flags().StringVarP(&pythonVersion, "version", "v", "", "Use this Python version instead")
+}
+
+func createVenv(venvDir string) error {
+	pythonExecInfo, err := python.VersionLookup(pythonVersion)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Using %s %s to create virtualenv...\n",
+		bold.Add(color.FgYellow).Sprint(pythonExecInfo.Path),
+		green.Sprintf("(%s)", pythonExecInfo.Version),
+	)
+
+	cmd := exec.Command(pythonExecInfo.Path, "-m", "venv", venvDir)
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		return err
+	}
+	if err = cmd.Start(); err != nil {
+		return err
+	}
+
+	stderrOut, err := io.ReadAll(stderr)
+	if err != nil {
+		return err
+	}
+
+	if err := cmd.Wait(); err != nil {
+		return fmt.Errorf("%s: %s", err, stderrOut)
+	}
+
+	return nil
 }
