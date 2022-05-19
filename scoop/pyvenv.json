@@ -1,19 +1,19 @@
 {
-    "version": "0.1.1",
+    "version": "0.2.0",
     "architecture": {
         "32bit": {
-            "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.1.1/pyvenv-0.1.1-windows-386.zip",
+            "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.2.0/pyvenv-0.2.0-windows-386.zip",
             "bin": [
                 "pyvenv.exe"
             ],
-            "hash": "07d55608924b75b5046d6f6898f0f45d20107a443dbd293329cf468399322a0d"
+            "hash": "627bf172a2b6633e676ee8d31efe728556ee1bed111fe361ee960944c0c4a021"
         },
         "64bit": {
-            "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.1.1/pyvenv-0.1.1-windows-amd64.zip",
+            "url": "https://github.com/dhruvmanila/pyvenv/releases/download/v0.2.0/pyvenv-0.2.0-windows-amd64.zip",
             "bin": [
                 "pyvenv.exe"
             ],
-            "hash": "78bcaae15ec4150568c180011de9b3d9cb305f01c36e584837a3c987b58786ac"
+            "hash": "68b9bfa720819ea0c287f75062478c972a6e04384316989f956dddd9194fd676"
         }
     },
     "homepage": "https://github.com/dhruvmanila/pyvenv",
