@@ -19,6 +19,15 @@ func (e *VersionNotFoundError) Error() string {
 	return e.Version + ": version does not exist"
 }
 
+// ExecInfo contains information about the Python executable.
+type ExecInfo struct {
+	// Path is the absolute path to the executable file.
+	Path string
+
+	// Version is the version of the executable file.
+	Version string
+}
+
 // constructCommandName is used to contruct the Python command name
 // from the given version string.
 //
@@ -44,15 +53,15 @@ func constructCommandName(version string) string {
 // If it's unable to find an exectuable that matches the given version, the
 // error is of type *VersionNotFoundError. Other error types may be returned
 // for other situations.
-func VersionLookup(version string) (string, string, error) {
+func VersionLookup(version string) (*ExecInfo, error) {
 	cmd := exec.Command(constructCommandName(version), "--version")
 
 	output, err := cmd.Output()
 	if err != nil {
 		if errors.Is(err, exec.ErrNotFound) {
-			return "", "", &VersionNotFoundError{version}
+			return nil, &VersionNotFoundError{version}
 		}
-		return "", "", err
+		return nil, err
 	}
 
 	// Output: "Python <version><LF/CRLF>"
@@ -61,13 +70,16 @@ func VersionLookup(version string) (string, string, error) {
 		return r == '\n' || r == '\r'
 	})
 	if version != "" && version != actualVersion {
-		return "", "", &VersionNotFoundError{version}
+		return nil, &VersionNotFoundError{version}
 	}
 
 	realpath, err := filepath.EvalSymlinks(cmd.Path)
 	if err != nil {
-		return "", "", err
+		return nil, err
 	}
 
-	return realpath, actualVersion, nil
+	return &ExecInfo{
+		Path:    realpath,
+		Version: actualVersion,
+	}, nil
 }
