@@ -25,7 +25,7 @@ var createCmd = &cobra.Command{
 	Long: `Create a virtual environment for the current directory.
 
 The environment will be created using the builtin 'venv' module. If the
-'--version' flag is not specified, the default Python version will be used.
+'--python' flag is not specified, the default Python version will be used.
 
 The name argument is used to name the virtual environment. If it is not
 provided, then the project name will be used.
@@ -65,7 +65,10 @@ provided, then the project name will be used.
 
 func init() {
 	rootCmd.AddCommand(createCmd)
-	createCmd.Flags().StringVarP(&pythonVersion, "version", "v", "", "Use this Python version instead")
+	createCmd.Flags().StringVar(
+		&pythonVersion, "python", "", `specify which version of Python to use for
+creating the virtualenv`,
+	)
 }
 
 func createVenv(venvDir string) error {
