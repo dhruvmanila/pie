@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
@@ -26,9 +27,15 @@ var listCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
+		_, currentVenv := filepath.Split(os.Getenv("VIRTUAL_ENV"))
 		for _, entry := range entries {
 			if entry.IsDir() {
-				bold.Println("  " + entry.Name())
+				venvName := entry.Name()
+				if currentVenv == venvName {
+					bold.Println("* " + venvName)
+				} else {
+					bold.Println("  " + venvName)
+				}
 			}
 		}
 	},
