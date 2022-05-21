@@ -35,6 +35,7 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+      - "^chore:"
       - Merge pull request
       - Merge branch
 
