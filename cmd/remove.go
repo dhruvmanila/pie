@@ -22,6 +22,18 @@ associated with that name is removed instead.
 `,
 	Aliases: []string{"rm"},
 	Args:    cobra.MaximumNArgs(1),
+	ValidArgsFunction: func(_ *cobra.Command, args []string, _ string) ([]string, cobra.ShellCompDirective) {
+		if len(args) != 0 {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+
+		venvInfo, err := getVenvInfo()
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+
+		return venvInfo.Names, cobra.ShellCompDirectiveNoFileComp
+	},
 	Run: func(_ *cobra.Command, args []string) {
 		dataDir, err := xdg.DataFile("pyvenv/")
 		if err != nil {
