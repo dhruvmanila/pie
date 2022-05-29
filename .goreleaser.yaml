@@ -57,8 +57,8 @@ scoop:
 brews:
   - tap:
       owner: dhruvmanila
-      name: homebrew-tap
-    folder: Formula
+      name: pyvenv
+    folder: HomebrewFormula
     homepage: https://github.com/dhruvmanila/pyvenv
     description: Personal tool for managing Python virtual environments.
     license: MIT
