@@ -4,6 +4,7 @@ project_name: pyvenv
 before:
   hooks:
     - make tidy
+    - ./scripts/gen-completions.sh
 
 builds:
   - main: .
@@ -22,6 +23,10 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+    files:
+      - README.md
+      - LICENSE
+      - completions/*
 
 checksum:
   name_template: "checksums.txt"
@@ -31,9 +36,9 @@ snapshot:
 
 changelog:
   sort: asc
+  use: github
   filters:
     exclude:
-      - "^docs"
       - "^test"
       - "^chore"
       - Merge pull request
@@ -48,3 +53,19 @@ scoop:
   homepage: https://github.com/dhruvmanila/pyvenv
   description: Personal tool for managing Python virtual environments.
   license: MIT
+
+brews:
+  - tap:
+      owner: dhruvmanila
+      name: homebrew-tap
+    folder: Formula
+    homepage: https://github.com/dhruvmanila/pyvenv
+    description: Personal tool for managing Python virtual environments.
+    license: MIT
+    install: |
+      bin.install "pyvenv"
+      bash_completion.install "completions/pyvenv.bash" => "pyvenv"
+      zsh_completion.install "completions/pyvenv.zsh" => "_pyvenv"
+      fish_completion.install "completions/pyvenv.fish"
+    test: |
+      system "#{bin}/pyvenv --version"
