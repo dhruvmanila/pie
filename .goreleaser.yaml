@@ -60,6 +60,7 @@ brews:
       name: pyvenv
     folder: HomebrewFormula
     homepage: https://github.com/dhruvmanila/pyvenv
+    commit_msg_template: "chore(brew): update to version {{ .Tag }}"
     description: Personal tool for managing Python virtual environments.
     license: MIT
     install: |
