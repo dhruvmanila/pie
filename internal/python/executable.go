@@ -17,7 +17,7 @@ type ExecInfo struct {
 	Version string
 }
 
-// constructCommandName is used to contruct the Python command name
+// constructCommandName is used to construct the Python command name
 // from the given version string.
 //
 // The output is OS specific where windows commands are of the form
@@ -39,7 +39,7 @@ func constructCommandName(version string) string {
 // there are multiple executables available on PATH, this will only check
 // against the first one.
 //
-// If it's unable to find an exectuable that matches the given version, the
+// If it's unable to find an executable that matches the given version, the
 // error is of type *VersionNotFoundError. Other error types may be returned
 // for other situations.
 func VersionLookup(version string) (*ExecInfo, error) {
