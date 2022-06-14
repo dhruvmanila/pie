@@ -46,15 +46,15 @@ associated with that name is removed instead.
 		}
 
 		venvDir := filepath.Join(dataDir, venvName)
-		fmt.Printf("Virtualenv location: %s\n", green.Sprint(venvDir))
 		if stat, err := os.Stat(venvDir); err == nil && stat.IsDir() {
+			fmt.Printf("Removing virtualenv (%s)...\n", green.Sprint(venvDir))
 			if err = os.RemoveAll(venvDir); err != nil {
 				log.Fatal(err)
 			} else {
 				green.Println("✔ Successfully removed virtual environment!")
 			}
 		} else if errors.Is(err, fs.ErrNotExist) {
-			log.Fatal(red.Sprintf("✘ Virtualenv %q does not exist!", venvName))
+			log.Fatal(red.Sprint("✘ No virtualenv has been created for this project yet!"))
 		} else if err != nil {
 			log.Fatal(err)
 		}
