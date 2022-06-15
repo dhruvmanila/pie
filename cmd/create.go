@@ -8,9 +8,8 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 
-	"github.com/adrg/xdg"
+	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/dhruvmanila/pyvenv/internal/python"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -20,42 +19,38 @@ import (
 var pythonVersion string
 
 var createCmd = &cobra.Command{
-	Use:   "create [flags] [name]",
-	Short: "Create a venv for the current directory",
+	Use:   "create",
+	Short: "Create a virtual environment",
 	Long: `Create a virtual environment for the current directory.
 
 The environment will be created using the builtin 'venv' module. If the
 '--python' flag is not specified, the default Python version will be used.
-
-The name argument is used to name the virtual environment. If it is not
-provided, then the project name will be used.
 `,
-	Args: cobra.MaximumNArgs(1),
-	Run: func(_ *cobra.Command, args []string) {
+	Args: cobra.NoArgs,
+	Run: func(_ *cobra.Command, _ []string) {
 		bold.Println("==> Creating a virtualenv for this project...")
 
-		dataDir, err := xdg.DataFile("pyvenv/")
+		p, err := project.New()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		venvName, err := getVenvNameFromArgs(args)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		venvDir := filepath.Join(dataDir, venvName)
-		if stat, err := os.Stat(venvDir); err == nil && stat.IsDir() {
-			log.Fatal(red.Sprintf("✘ Virtualenv already exists for this project: %s", venvName))
+		if stat, err := os.Stat(p.VenvDir); err == nil && stat.IsDir() {
+			log.Fatal(red.Sprintf("✘ Virtualenv already exists for this project: %s", p.Name))
 		} else if errors.Is(err, fs.ErrNotExist) {
-			if err = createVenv(venvDir); err != nil {
+			if err = createVenv(p); err != nil {
 				if _, ok := err.(*python.VersionNotFoundError); ok {
 					log.Fatal(red.Sprintf("✘ Python version %s does not exist!", pythonVersion))
 				}
 				log.Fatal(err)
 			} else {
+				// Associate project directory with the environment.
+				if err = p.WriteProjectFile(); err != nil {
+					log.Fatal(err)
+				}
+
 				green.Println("✔ Successfully created virtual environment!")
-				fmt.Printf("Virtualenv location: %s\n", green.Sprint(venvDir))
+				fmt.Printf("Virtualenv location: %s\n", green.Sprint(p.VenvDir))
 			}
 		} else if err != nil {
 			log.Fatal(err)
@@ -71,7 +66,7 @@ creating the virtualenv`,
 	)
 }
 
-func createVenv(venvDir string) error {
+func createVenv(p *project.Project) error {
 	pythonExecInfo, err := python.VersionLookup(pythonVersion)
 	if err != nil {
 		return err
@@ -82,7 +77,7 @@ func createVenv(venvDir string) error {
 		green.Sprintf("(%s)", pythonExecInfo.Version),
 	)
 
-	cmd := exec.Command(pythonExecInfo.Path, "-m", "venv", venvDir)
+	cmd := exec.Command(pythonExecInfo.Path, "-m", "venv", p.VenvDir, "--prompt", p.Name)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
 		return err
