@@ -9,12 +9,21 @@ import (
 	"github.com/adrg/xdg"
 )
 
+// Project contains information regarding a specific project for which the
+// virtual environment is being managed.
 type Project struct {
-	Name    string
-	Path    string
+	// Name is the project name.
+	Name string
+
+	// Path is the absolute path to the project directory.
+	Path string
+
+	// VenvDir is the absolute path to the virtual environment directory
+	// for this project.
 	VenvDir string
 }
 
+// New creates a new project for the current directory.
 func New() (*Project, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -40,6 +49,9 @@ func New() (*Project, error) {
 	}, err
 }
 
+// WriteProjectFile associates the project directory with the virtual
+// environment. This is done by writing the absolute path to the project
+// directory in a ".project" file inside the virtual environment directory.
 func (p *Project) WriteProjectFile() error {
 	projectFilePath := filepath.Join(p.VenvDir, ".project")
 	f, err := os.OpenFile(projectFilePath, os.O_WRONLY|os.O_CREATE, 0o644)

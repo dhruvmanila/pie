@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 )
 
+// readProjectFile reads and returns the content of the project file
+// present in the given virtual environment directory.
 func readProjectFile(venvDir string) (string, error) {
 	projectFilePath := filepath.Join(venvDir, ".project")
 	content, err := os.ReadFile(projectFilePath)
