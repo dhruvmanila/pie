@@ -36,7 +36,7 @@ func New() (*Project, error) {
 	}
 	_, name := filepath.Split(path)
 
-	hash, err := hashPath(cwd)
+	hash, err := hashPath(path)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func New() (*Project, error) {
 	venvName := fmt.Sprintf("%s-%s", name, hash[:8])
 	return &Project{
 		Name:    name,
-		Path:    cwd,
+		Path:    path,
 		VenvDir: filepath.Join(dataDir, venvName),
 	}, err
 }
