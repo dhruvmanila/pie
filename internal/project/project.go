@@ -29,7 +29,12 @@ func New() (*Project, error) {
 	if err != nil {
 		return nil, err
 	}
-	_, name := filepath.Split(cwd)
+
+	path, err := filepath.EvalSymlinks(cwd)
+	if err != nil {
+		return nil, err
+	}
+	_, name := filepath.Split(path)
 
 	hash, err := hashPath(cwd)
 	if err != nil {
