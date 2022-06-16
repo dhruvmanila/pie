@@ -5,13 +5,13 @@
 class Pyvenv < Formula
   desc "Personal tool for managing Python virtual environments."
   homepage "https://github.com/dhruvmanila/pyvenv"
-  version "0.3.6"
+  version "0.4.0"
   license "MIT"
 
   on_macos do
-    if Hardware::CPU.intel?
-      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.3.6/pyvenv-0.3.6-darwin-amd64.tar.gz"
-      sha256 "259caead8eb9909529c78be4fe407194a0cab4bfd85fb57aa47909ea1a5dbf5d"
+    if Hardware::CPU.arm?
+      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.4.0/pyvenv-0.4.0-darwin-arm64.tar.gz"
+      sha256 "7b76f297655c4f6faa10ca893e682e501c6eaf76c076ee4c1e5e3959dc6b0d4e"
 
       def install
         bin.install "pyvenv"
@@ -20,9 +20,9 @@ class Pyvenv < Formula
         fish_completion.install "completions/pyvenv.fish"
       end
     end
-    if Hardware::CPU.arm?
-      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.3.6/pyvenv-0.3.6-darwin-arm64.tar.gz"
-      sha256 "3a51412b08996cb14a782dbceba29ac9860ca25127d63abff70978e8c647bfc7"
+    if Hardware::CPU.intel?
+      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.4.0/pyvenv-0.4.0-darwin-amd64.tar.gz"
+      sha256 "5abfdcd5d28d02a9e3b13615d7ca6b6d5b69980feb35f734fdfe8eadbd562b6d"
 
       def install
         bin.install "pyvenv"
@@ -34,9 +34,9 @@ class Pyvenv < Formula
   end
 
   on_linux do
-    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.3.6/pyvenv-0.3.6-linux-arm64.tar.gz"
-      sha256 "d965f6d8040e8bb96e095b781638473e5cefca208ee1601c60d4bbb77d982a00"
+    if Hardware::CPU.intel?
+      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.4.0/pyvenv-0.4.0-linux-amd64.tar.gz"
+      sha256 "d6bc6b877d8666bf9cb56e5d55d059f2ad082b35032e33fe2d9418cd1d5679ef"
 
       def install
         bin.install "pyvenv"
@@ -45,9 +45,9 @@ class Pyvenv < Formula
         fish_completion.install "completions/pyvenv.fish"
       end
     end
-    if Hardware::CPU.intel?
-      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.3.6/pyvenv-0.3.6-linux-amd64.tar.gz"
-      sha256 "ed447c84977fb08dae634be53b60c0370d77cce5339af45c350e0b30d3fd9d76"
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.4.0/pyvenv-0.4.0-linux-arm64.tar.gz"
+      sha256 "35d35030bbead074e86930dce85dbb92b00d716142afae4dd74aa83505547128"
 
       def install
         bin.install "pyvenv"
