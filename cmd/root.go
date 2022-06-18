@@ -21,7 +21,7 @@ var rootCmd = &cobra.Command{
 	Version: Version,
 	Run: func(_ *cobra.Command, _ []string) {
 		if outputVenvInfo {
-			p, err := project.New()
+			p, err := project.NewFromWd()
 			if err != nil {
 				log.Fatal(err)
 			}

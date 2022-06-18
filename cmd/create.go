@@ -30,7 +30,7 @@ The environment will be created using the builtin 'venv' module. If the
 	Run: func(_ *cobra.Command, _ []string) {
 		bold.Println("==> Creating a virtualenv for this project...")
 
-		p, err := project.New()
+		p, err := project.NewFromWd()
 		if err != nil {
 			log.Fatal(err)
 		}

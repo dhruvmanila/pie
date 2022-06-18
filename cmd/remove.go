@@ -18,7 +18,7 @@ var removeCmd = &cobra.Command{
 	Aliases: []string{"rm"},
 	Args:    cobra.NoArgs,
 	Run: func(_ *cobra.Command, _ []string) {
-		p, err := project.New()
+		p, err := project.NewFromWd()
 		if err != nil {
 			log.Fatal(err)
 		}

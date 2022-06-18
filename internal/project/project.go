@@ -23,17 +23,8 @@ type Project struct {
 	VenvDir string
 }
 
-// New creates a new project for the current directory.
-func New() (*Project, error) {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-
-	path, err := filepath.EvalSymlinks(cwd)
-	if err != nil {
-		return nil, err
-	}
+// New creates a new project for the given path.
+func New(path string) (*Project, error) {
 	_, name := filepath.Split(path)
 
 	hash, err := hashPath(path)
@@ -52,6 +43,22 @@ func New() (*Project, error) {
 		Path:    path,
 		VenvDir: filepath.Join(dataDir, venvName),
 	}, err
+}
+
+// NewFromWd creates a new project from the current working directory after
+// evaluating all the symlinks in the path.
+func NewFromWd() (*Project, error) {
+	dir, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
+	dir, err = filepath.EvalSymlinks(dir)
+	if err != nil {
+		return nil, err
+	}
+
+	return New(dir)
 }
 
 // WriteProjectFile associates the project directory with the virtual
