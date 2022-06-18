@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/fatih/color"
@@ -21,13 +22,35 @@ var rootCmd = &cobra.Command{
 	Version: Version,
 	Run: func(_ *cobra.Command, _ []string) {
 		if outputVenvInfo {
-			p, err := project.NewFromWd()
+			homeDir, err := os.UserHomeDir()
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			if stat, err := os.Stat(p.VenvDir); err == nil && stat.IsDir() {
-				fmt.Println(p.VenvDir)
+			path, err := os.Getwd()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			path, err = filepath.EvalSymlinks(path)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// No virtual environments will ever be created in the User
+			// home directory, so let's stop searching there.
+			for path != homeDir {
+				p, err := project.New(path)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				if stat, err := os.Stat(p.VenvDir); err == nil && stat.IsDir() {
+					fmt.Println(p.VenvDir)
+					break
+				}
+
+				path = filepath.Dir(path)
 			}
 		}
 	},
