@@ -1,4 +1,4 @@
 package cmd
 
 // Version is the current tool version.
-const Version = "v0.4.4"
+const Version = "v0.5.0"
