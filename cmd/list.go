@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
@@ -34,6 +36,7 @@ var listCmd = &cobra.Command{
 			} else {
 				bold.Print("  " + venv.Name)
 			}
+			yellowBold.Printf(" (%s)", venv.Version)
 			faint.Printf(" (%s)\n", venv.Project)
 		}
 	},
@@ -55,6 +58,9 @@ type VirtualEnv struct {
 	// Project is the absolute path to the project this virtual environment
 	// belongs to.
 	Project string
+
+	// Version is the Python version this environment was created from.
+	Version string
 }
 
 // getVenvs returns information regarding all the managed virtual environments.
@@ -78,12 +84,43 @@ func getVenvs(dataDir string) ([]*VirtualEnv, error) {
 			return nil, err
 		}
 
+		pythonVersion, err := getPythonVersionFromConfig(venvDir)
+		if err != nil {
+			return nil, err
+		}
+
 		venvs = append(venvs, &VirtualEnv{
 			Name:    venvName,
 			Path:    venvDir,
 			Project: projectPath,
+			Version: pythonVersion,
 		})
 	}
 
 	return venvs, nil
+}
+
+// getPythonVersionFromConfig returns the Python version used to create
+// the virtual environment.
+//
+// The version string is read from the environment config file present
+// in the given environment directory.
+func getPythonVersionFromConfig(venvDir string) (string, error) {
+	pyvenvPath := filepath.Join(venvDir, "pyvenv.cfg")
+
+	file, err := os.Open(pyvenvPath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		pairs := strings.Split(scanner.Text(), "=")
+		if strings.TrimSpace(pairs[0]) == "version" {
+			return strings.TrimSpace(pairs[1]), nil
+		}
+	}
+
+	return "", fmt.Errorf("%q: venv config file does not contain 'version' key", pyvenvPath)
 }

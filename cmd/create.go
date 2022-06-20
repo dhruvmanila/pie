@@ -11,7 +11,6 @@ import (
 
 	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/dhruvmanila/pyvenv/internal/python"
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -73,7 +72,7 @@ func createVenv(p *project.Project) error {
 	}
 
 	fmt.Printf("Using %s %s to create virtualenv...\n",
-		bold.Add(color.FgYellow).Sprint(pythonExecInfo.Path),
+		yellowBold.Sprint(pythonExecInfo.Path),
 		green.Sprintf("(%s)", pythonExecInfo.Version),
 	)
 
