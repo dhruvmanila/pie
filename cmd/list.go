@@ -12,6 +12,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// verbose is a flag used to output additional environment information.
+var verbose bool
+
 var listCmd = &cobra.Command{
 	Use:     "list",
 	Short:   "List out all the managed virtualenvs",
@@ -31,19 +34,23 @@ var listCmd = &cobra.Command{
 
 		_, currentVenv := filepath.Split(os.Getenv("VIRTUAL_ENV"))
 		for _, venv := range venvs {
+			var line string
 			if currentVenv == venv.Name {
-				bold.Print("* " + venv.Name)
+				line += bold.Sprint("* " + venv.Name)
 			} else {
-				bold.Print("  " + venv.Name)
+				line += bold.Sprint("  " + venv.Name)
 			}
-			yellowBold.Printf(" (%s)", venv.Version)
-			faint.Printf(" (%s)\n", venv.Project)
+			if verbose {
+				line += yellowBold.Sprintf(" (%s)", venv.Version) + faint.Sprintf(" (%s)", venv.Project)
+			}
+			fmt.Println(line)
 		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+	listCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "output additional venv information")
 }
 
 // VirtualEnv contains information regarding a single virtual environment

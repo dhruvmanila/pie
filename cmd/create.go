@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// pythonVersion is the Python version to use to create the virtual environment.
+// pythonVersion is the Python version to use for creating the virtual environment.
 var pythonVersion string
 
 var createCmd = &cobra.Command{
