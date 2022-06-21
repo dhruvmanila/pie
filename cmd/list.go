@@ -86,14 +86,19 @@ func getVenvs(dataDir string) ([]*VirtualEnv, error) {
 		venvName := entry.Name()
 		venvDir := filepath.Join(dataDir, venvName)
 
-		projectPath, err := readProjectFile(venvDir)
-		if err != nil {
-			return nil, err
-		}
+		var projectPath, pythonVersion string
 
-		pythonVersion, err := getPythonVersionFromConfig(venvDir)
-		if err != nil {
-			return nil, err
+		// Only compute when necessary.
+		if verbose {
+			projectPath, err = readProjectFile(venvDir)
+			if err != nil {
+				return nil, err
+			}
+
+			pythonVersion, err = getPythonVersionFromConfig(venvDir)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		venvs = append(venvs, &VirtualEnv{
