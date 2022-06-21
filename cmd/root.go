@@ -17,9 +17,8 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "pyvenv",
-	Short:   "Personal tool to manage Python virtual environments.",
-	Version: Version,
+	Use:   "pyvenv",
+	Short: "Personal tool to manage Python virtual environments.",
 	Run: func(_ *cobra.Command, _ []string) {
 		if outputVenvInfo {
 			homeDir, err := os.UserHomeDir()
@@ -56,7 +55,8 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-func Execute() {
+func Execute(version string) {
+	rootCmd.Version = version
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
