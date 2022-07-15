@@ -69,6 +69,13 @@ List out all the managed environments:
 pyvenv list  # or pyvenv ls
 ```
 
+Show information such as Python version and project path for all the managed
+environments:
+
+```bash
+pyvenv list --verbose
+```
+
 Delete a virtualenv for the current project:
 
 ```bash
