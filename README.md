@@ -127,24 +127,24 @@ Set-Alias a Pyvenv-Activate
 
 #### bash/zsh
 
-```bash
-function pyvenv-activate() {
+```sh
+pyvenv_activate() {
   # Activate a Python virtual environment built using the `pyvenv` command.
   # https://github.com/dhruvmanila/pyvenv
   #
   # The activation part cannot be a script as that is executed in a subshell
   # and so the `source` part will also be executed in the subshell instead of
   # the current shell.
-  if command -v pyvenv &> /dev/null; then
+  if command -v pyvenv > /dev/null 2>&1; then
     VENV_DIR=$(pyvenv --venv 2> /dev/null)
-    if (( $? == 0 )) && [ -n "$VENV_DIR" ]; then
-      source "$VENV_DIR/bin/activate"
+    if [ -n "$VENV_DIR" ]; then
+      . "$VENV_DIR/bin/activate"
     fi
   fi
 }
 
 # Alias it for quick activation
-alias a="pyvenv-activate"
+alias a="pyvenv_activate"
 ```
 
 #### fish
