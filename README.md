@@ -35,8 +35,8 @@ scoop install https://raw.githubusercontent.com/dhruvmanila/pyvenv/main/scoop/py
 
 ### Build from source
 
-Recent [Go](https://go.dev/) toolchain is necessary to build actionlint from
-source. Use Go 1.16 or later.
+Recent [Go](https://go.dev/) toolchain is necessary to build from source. Use Go
+1.16 or later.
 
 ```sh
 # Install the latest stable version
@@ -141,6 +141,32 @@ alias a="pyvenv-activate"
 ```
 
 #### fish
+
+## Development
+
+### Building the project
+
+The executable can be built using either the `make` command or using the `go
+build` command directly. Refer to `make help` for more info.
+
+To build a local snapshot using [`goreleaser`](https://goreleaser.com/) use the
+following command:
+
+```sh
+goreleaser build --single-target --rm-dist --snapshot
+```
+
+This will create the release binary for your system in a `dist/` folder.
+
+### Release process
+
+The release is automated using [`goreleaser`](https://goreleaser.com/) and
+GitHub Actions using this
+[workflow](https://github.com/dhruvmanila/pyvenv/blob/main/.github/workflows/release.yml).
+It can be triggered by pushing the next version tag on GitHub. This will also
+update the Homebrew and scoop package specification.
+
+This project follows [Semantic Versioning](https://semver.org/).
 
 ## License
 
