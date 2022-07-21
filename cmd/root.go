@@ -21,11 +21,6 @@ var rootCmd = &cobra.Command{
 	Short: "Personal tool to manage Python virtual environments.",
 	Run: func(_ *cobra.Command, _ []string) {
 		if outputVenvInfo {
-			homeDir, err := os.UserHomeDir()
-			if err != nil {
-				log.Fatal(err)
-			}
-
 			path, err := os.Getwd()
 			if err != nil {
 				log.Fatal(err)
@@ -36,9 +31,7 @@ var rootCmd = &cobra.Command{
 				log.Fatal(err)
 			}
 
-			// No virtual environments will ever be created in the User
-			// home directory, so let's stop searching there.
-			for path != homeDir {
+			for path != "/" {
 				p, err := project.New(path)
 				if err != nil {
 					log.Fatal(err)
