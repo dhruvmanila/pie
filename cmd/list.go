@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/adrg/xdg"
+	"github.com/dhruvmanila/pyvenv/internal/xdg"
 	"github.com/spf13/cobra"
 )
 
@@ -21,13 +21,9 @@ var listCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Args:    cobra.NoArgs,
 	Run: func(_ *cobra.Command, _ []string) {
-		dataDir, err := xdg.DataFile("pyvenv/")
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Printf("Root directory: %s\n", green.Sprint(dataDir))
+		fmt.Printf("Root directory: %s\n", green.Sprint(xdg.DataDir))
 
-		venvs, err := getVenvs(dataDir)
+		venvs, err := getVenvs(xdg.DataDir)
 		if err != nil {
 			log.Fatal(err)
 		}

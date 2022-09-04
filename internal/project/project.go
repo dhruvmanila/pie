@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/adrg/xdg"
+	"github.com/dhruvmanila/pyvenv/internal/xdg"
 )
 
 // Project contains information regarding a specific project for which the
@@ -32,16 +32,11 @@ func New(path string) (*Project, error) {
 		return nil, err
 	}
 
-	dataDir, err := xdg.DataFile("pyvenv/")
-	if err != nil {
-		return nil, err
-	}
-
 	venvName := fmt.Sprintf("%s-%s", name, hash[:8])
 	return &Project{
 		Name:    name,
 		Path:    path,
-		VenvDir: filepath.Join(dataDir, venvName),
+		VenvDir: filepath.Join(xdg.DataDir, venvName),
 	}, err
 }
 
