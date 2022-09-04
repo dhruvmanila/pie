@@ -19,7 +19,7 @@ var DataDir string
 func init() {
 	DataDir = filepath.Join(xdg.DataHome, appName)
 	if _, err := os.Stat(DataDir); errors.Is(err, fs.ErrNotExist) {
-		if err := os.Mkdir(DataDir, 0o755); err != nil {
+		if err := os.MkdirAll(DataDir, 0o755); err != nil {
 			log.Fatal(err)
 		}
 	}
