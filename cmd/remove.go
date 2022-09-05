@@ -6,10 +6,15 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/spf13/cobra"
 )
+
+// noConfirm is a flag to skip the confirmation prompt for removing a
+// virtual environment.
+var noConfirm bool
 
 var removeCmd = &cobra.Command{
 	Use:     "remove",
@@ -25,10 +30,21 @@ var removeCmd = &cobra.Command{
 
 		if stat, err := os.Stat(p.VenvDir); err == nil && stat.IsDir() {
 			fmt.Printf("Removing virtualenv (%s)...\n", green.Sprint(p.VenvDir))
-			if err = os.RemoveAll(p.VenvDir); err != nil {
-				log.Fatal(err)
-			} else {
-				green.Println("✔ Successfully removed virtual environment!")
+
+			var response string
+			if !noConfirm {
+				fmt.Print("Proceed? [y/n]: ")
+				if _, err = fmt.Scan(&response); err != nil {
+					log.Fatal(err)
+				}
+			}
+
+			if noConfirm || strings.ToLower(strings.TrimSpace(response)) == "y" {
+				if err = os.RemoveAll(p.VenvDir); err != nil {
+					log.Fatal(err)
+				} else {
+					green.Println("✔ Successfully removed virtual environment!")
+				}
 			}
 		} else if errors.Is(err, fs.ErrNotExist) {
 			log.Fatal(red.Sprint("✘ No virtualenv has been created for this project yet!"))
@@ -39,5 +55,6 @@ var removeCmd = &cobra.Command{
 }
 
 func init() {
+	removeCmd.Flags().BoolVarP(&noConfirm, "yes", "y", false, "skip the confirmation prompt")
 	rootCmd.AddCommand(removeCmd)
 }
