@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/fatih/color"
@@ -31,7 +32,14 @@ var rootCmd = &cobra.Command{
 				log.Fatal(err)
 			}
 
-			for path != "/" {
+			var root string
+			if runtime.GOOS == "windows" {
+				root = filepath.VolumeName(path)
+			} else {
+				root = "/"
+			}
+
+			for path != root {
 				p, err := project.New(path)
 				if err != nil {
 					log.Fatal(err)
