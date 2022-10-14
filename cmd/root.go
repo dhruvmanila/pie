@@ -34,7 +34,8 @@ var rootCmd = &cobra.Command{
 
 			var root string
 			if runtime.GOOS == "windows" {
-				root = filepath.VolumeName(path)
+				// Windows root path - "C:" + "\"
+				root = filepath.VolumeName(path) + string(os.PathSeparator)
 			} else {
 				root = "/"
 			}
