@@ -56,25 +56,34 @@ To create an environment using the default Python version:
 ```bash
 pyvenv create
 ```
+<p>
+<img src='./gifs/pyvenv-create.gif' alt='pyvenv-create-gif' />
+</p>
+<br>
 
 To create an environment using a specific Python version:
 
 ```bash
-pyvenv create --python 3.10.4
+pyvenv create --python 3.11.0
 ```
+
+<p>
+<img src='./gifs/pyvenv-create--python.gif' alt='pyvenv-create--python-gif' />
+</p>
+<br>
 
 List out all the managed environments:
 
 ```bash
 pyvenv list  # or pyvenv ls
 ```
+Use the `--verbose` flag to show
+information such as the Python version and project path.
 
-Show information such as Python version and project path for all the managed
-environments:
-
-```bash
-pyvenv list --verbose
-```
+<p>
+<img src='./gifs/pyvenv-ls.gif' alt='pyvenv-ls-gif' />
+</p>
+<br>
 
 Delete a virtualenv for the current project:
 
@@ -83,7 +92,13 @@ pyvenv remove  # or pyvenv rm
 ```
 
 The `remove` command will only work from within the project directory for which
-the virtual envionment was created for.
+the virtual envionment was created for. The confirmation prompt can be skipped
+with the `--yes` flag.
+
+<p>
+<img src='./gifs/pyvenv-rm.gif' alt='pyvenv-rm-gif' />
+</p>
+<br>
 
 ### Activating a virtual environment
 
@@ -100,6 +115,11 @@ working directory, it will exit with code 1 without printing anything.
 ```bash
 pyvenv --venv
 ```
+
+<p>
+<img src='./gifs/pyvenv--venv.gif' alt='pyvenv--venv-gif' />
+</p>
+<br>
 
 The tool keeps track of the project for which a specific virtual environment was
 created for. This helps in finding out the venv directory based on the current
