@@ -1,4 +1,5 @@
 pyvenv
+pyvenv.exe
 local/
 dist/
 completions/

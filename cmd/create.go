@@ -10,7 +10,7 @@ import (
 	"os/exec"
 
 	"github.com/dhruvmanila/pyvenv/internal/project"
-	"github.com/dhruvmanila/pyvenv/internal/python"
+	"github.com/dhruvmanila/pyvenv/internal/pythonfinder"
 	"github.com/spf13/cobra"
 )
 
@@ -38,8 +38,14 @@ The environment will be created using the builtin 'venv' module. If the
 			log.Fatal(red.Sprintf("✘ Virtualenv already exists for this project: %s", p.Name))
 		} else if errors.Is(err, fs.ErrNotExist) {
 			if err = createVenv(p); err != nil {
-				if _, ok := err.(*python.VersionNotFoundError); ok {
-					log.Fatal(red.Sprintf("✘ Python version %s does not exist!", pythonVersion))
+				if errors.Is(err, pythonfinder.ErrVersionNotFound) {
+					if pythonVersion != "" {
+						log.Fatal(red.Sprintf("✘ Python version %s does not exist!", pythonVersion))
+					} else {
+						log.Fatal(red.Sprintf("✘ No Python version found!"))
+					}
+				} else if errors.Is(err, pythonfinder.ErrInvalidVersion) {
+					log.Fatal(red.Sprintf("✘ Invalid Python version: %s (expected format: <major>.<minor>.<patch>)", pythonVersion))
 				}
 				log.Fatal(err)
 			} else {
@@ -66,17 +72,17 @@ creating the virtualenv`,
 }
 
 func createVenv(p *project.Project) error {
-	pythonExecInfo, err := python.VersionLookup(pythonVersion)
+	v, err := pythonfinder.New().Find(pythonVersion)
 	if err != nil {
 		return err
 	}
 
 	fmt.Printf("Using %s %s to create virtualenv...\n",
-		yellowBold.Sprint(pythonExecInfo.Path),
-		green.Sprintf("(%s)", pythonExecInfo.Version),
+		yellowBold.Sprint(v.Executable),
+		green.Sprintf("(%s)", v.VersionInfo.String()),
 	)
 
-	cmd := exec.Command(pythonExecInfo.Path, "-m", "venv", p.VenvDir, "--prompt", p.Name)
+	cmd := exec.Command(v.Executable, "-m", "venv", p.VenvDir, "--prompt", p.Name)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
 		return err
