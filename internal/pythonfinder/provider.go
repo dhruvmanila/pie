@@ -4,7 +4,6 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"strings"
 )
@@ -15,7 +14,6 @@ import (
 // executables.
 type Provider interface {
 	// Executables returns a list of absolute paths to Python executables.
-	// If the path is a symlink, it should be resolved to the real path.
 	Executables() ([]string, error)
 }
 
@@ -56,8 +54,6 @@ func execsInPath(path string) ([]string, error) {
 
 	return execs, nil
 }
-
-var pythonFileRegex = regexp.MustCompile(`python(\d(\.?\d\d?)?)?(|.exe)$`)
 
 // looksLikePython returns true if the given filename looks like a Python
 // executable.
