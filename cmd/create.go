@@ -119,9 +119,6 @@ func createVenv(p *project.Project) error {
 
 		select {
 		case <-sig:
-			// Ensure that the virtual environment is deleted if we received
-			// a signal to cancel the command.
-			os.RemoveAll(p.VenvDir)
 			signalReceived <- true
 		case <-stop:
 			signalReceived <- false
@@ -135,6 +132,9 @@ func createVenv(p *project.Project) error {
 	// is buffered.
 	close(stop)
 	if <-signalReceived {
+		// Ensure that the virtual environment is deleted if we received
+		// a signal to cancel the command.
+		os.RemoveAll(p.VenvDir)
 		return errCommandCancelled
 	}
 
