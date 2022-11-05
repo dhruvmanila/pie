@@ -3,7 +3,6 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"io"
 	"io/fs"
 	"log"
 	"os"
@@ -79,25 +78,17 @@ func createVenv(p *project.Project) error {
 
 	fmt.Printf("Using %s %s to create virtualenv...\n",
 		yellowBold.Sprint(v.Executable),
-		green.Sprintf("(%s)", v.VersionInfo.String()),
+		green.Sprintf("(%s)", v.VersionInfo),
 	)
 
 	cmd := exec.Command(v.Executable, "-m", "venv", p.VenvDir, "--prompt", p.Name)
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		return err
-	}
-	if err = cmd.Start(); err != nil {
-		return err
-	}
 
-	stderrOut, err := io.ReadAll(stderr)
+	// Creating the virtual environment using the 'venv' module does not
+	// produce any output, so the only output we get is the error message
+	// if the command fails.
+	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return err
-	}
-
-	if err := cmd.Wait(); err != nil {
-		return fmt.Errorf("%s: %s", err, stderrOut)
+		return fmt.Errorf("%s: %s", err, output)
 	}
 
 	return nil
