@@ -17,9 +17,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// errCommandCancelled is returned when the user cancels the command.
-var errCommandCancelled = errors.New("command cancelled")
-
 // pythonVersion is the Python version to use for creating the virtual environment.
 var pythonVersion string
 
@@ -44,9 +41,7 @@ The environment will be created using the builtin 'venv' module. If the
 			log.Fatal(red.Sprintf("✘ Virtualenv already exists for this project: %s", p.Name))
 		} else if errors.Is(err, fs.ErrNotExist) {
 			if err = createVenv(p); err != nil {
-				if errors.Is(err, errCommandCancelled) {
-					return
-				} else if errors.Is(err, pythonfinder.ErrVersionNotFound) {
+				if errors.Is(err, pythonfinder.ErrVersionNotFound) {
 					if pythonVersion != "" {
 						log.Fatal(red.Sprintf("✘ Python version %s does not exist!", pythonVersion))
 					} else {
@@ -135,7 +130,7 @@ func createVenv(p *project.Project) error {
 		// Ensure that the virtual environment is deleted if we received
 		// a signal to cancel the command.
 		os.RemoveAll(p.VenvDir)
-		return errCommandCancelled
+		os.Exit(1)
 	}
 
 	// There was no signal received, so we can safely check the error.
