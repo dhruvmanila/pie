@@ -4,10 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
-	"runtime"
 
-	"github.com/dhruvmanila/pyvenv/internal/pathutil"
 	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -20,39 +17,16 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "pyvenv",
-	Short: "Personal tool to manage Python virtual environments.",
+	Short: "A tool to manage Python virtual environments.",
 	Run: func(_ *cobra.Command, _ []string) {
 		if outputVenvInfo {
-			path, err := os.Getwd()
+			p, err := project.Current()
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			path, err = filepath.EvalSymlinks(path)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			var root string
-			if runtime.GOOS == "windows" {
-				// Windows root path - "C:" + "\"
-				root = filepath.VolumeName(path) + string(os.PathSeparator)
-			} else {
-				root = "/"
-			}
-
-			for path != root {
-				p, err := project.New(path)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				if pathutil.IsDir(p.VenvDir) {
-					fmt.Println(p.VenvDir)
-					break
-				}
-
-				path = filepath.Dir(path)
+			if p != nil {
+				fmt.Println(p.VenvDir)
 			}
 		}
 	},

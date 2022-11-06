@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/dhruvmanila/pyvenv/internal/pathutil"
 	"github.com/dhruvmanila/pyvenv/internal/xdg"
 )
 
@@ -54,6 +55,35 @@ func NewFromWd() (*Project, error) {
 	}
 
 	return New(dir)
+}
+
+// Current returns the project associated with the current working directory,
+// nil if there is none.
+//
+// The search starts from the current working directory and goes up the
+// directory tree until a project is found or the root directory is reached.
+func Current() (*Project, error) {
+	p, err := NewFromWd()
+	if err != nil {
+		return nil, err
+	}
+
+	// root is the system root directory. For windows, it will be "C:\" while
+	// for other systems it will be "/".
+	root := filepath.VolumeName(p.Path) + string(os.PathSeparator)
+
+	for p.Path != root {
+		if pathutil.IsDir(p.VenvDir) {
+			return p, nil
+		}
+
+		p, err = New(filepath.Dir(p.Path))
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return nil, nil
 }
 
 // WriteProjectFile associates the project directory with the virtual
