@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io/fs"
 	"log"
 	"os"
 	"os/exec"
@@ -40,30 +39,28 @@ The environment will be created using the builtin 'venv' module. If the
 
 		if pathutil.IsDir(p.VenvDir) {
 			log.Fatal(red.Sprintf("✘ Virtualenv already exists for this project: %s", p.Name))
-		} else if errors.Is(err, fs.ErrNotExist) {
-			if err = createVenv(p); err != nil {
-				if errors.Is(err, pythonfinder.ErrVersionNotFound) {
-					if pythonVersion != "" {
-						log.Fatal(red.Sprintf("✘ Python version %s does not exist!", pythonVersion))
-					} else {
-						log.Fatal(red.Sprintf("✘ No Python version found!"))
-					}
-				} else if errors.Is(err, pythonfinder.ErrInvalidVersion) {
-					log.Fatal(red.Sprintf("✘ Invalid Python version: %s (expected format: <major>.<minor>.<patch>)", pythonVersion))
-				}
-				log.Fatal(err)
-			} else {
-				// Associate project directory with the environment.
-				if err = p.WriteProjectFile(); err != nil {
-					log.Fatal(err)
-				}
+		}
 
-				green.Println("✔ Successfully created virtual environment!")
-				fmt.Printf("Virtualenv location: %s\n", green.Sprint(p.VenvDir))
+		if err = createVenv(p); err != nil {
+			if errors.Is(err, pythonfinder.ErrVersionNotFound) {
+				if pythonVersion != "" {
+					log.Fatal(red.Sprintf("✘ Python version %s does not exist!", pythonVersion))
+				} else {
+					log.Fatal(red.Sprintf("✘ No Python version found!"))
+				}
+			} else if errors.Is(err, pythonfinder.ErrInvalidVersion) {
+				log.Fatal(red.Sprintf("✘ Invalid Python version: %s (expected format: <major>.<minor>.<patch>)", pythonVersion))
 			}
-		} else if err != nil {
 			log.Fatal(err)
 		}
+
+		// Associate project directory with the environment.
+		if err = p.WriteProjectFile(); err != nil {
+			log.Fatal(err)
+		}
+
+		green.Println("✔ Successfully created virtual environment!")
+		fmt.Printf("Virtualenv location: %s\n", green.Sprint(p.VenvDir))
 	},
 }
 
