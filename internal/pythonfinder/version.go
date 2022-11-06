@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+var execCommand = exec.Command
+
 // VersionInfo contains information about a Python version. It provides
 // information about the major, minor, and patch version numbers.
 type VersionInfo struct {
@@ -53,7 +55,7 @@ func (v *PythonVersion) String() string {
 // getVersionInfo returns the version information for the given Python
 // executable.
 func getVersionInfo(executable string) (*VersionInfo, error) {
-	cmd := exec.Command(executable, "--version")
+	cmd := execCommand(executable, "--version")
 
 	output, err := cmd.Output()
 	if err != nil {
