@@ -58,7 +58,7 @@ func execsInPath(path string) ([]string, error) {
 // looksLikePython returns true if the given filename looks like a Python
 // executable.
 func looksLikePython(name string) bool {
-	return strings.HasPrefix(name, "python") && pythonFileRegex.MatchString(name)
+	return pythonFileRegex.MatchString(name)
 }
 
 // isExecutable returns true if the given file info is executable.
