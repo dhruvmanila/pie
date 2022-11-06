@@ -63,7 +63,7 @@ func getVersionInfo(executable string) (*VersionInfo, error) {
 	// Output: "Python <version><LF/CRLF>"
 	_, version, found := strings.Cut(string(output), " ")
 	if !found {
-		return nil, err
+		return nil, fmt.Errorf("Unable to parse Python version: %q", output)
 	}
 	version = strings.TrimRight(version, "\r\n")
 
