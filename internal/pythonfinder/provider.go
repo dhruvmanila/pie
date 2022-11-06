@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/dhruvmanila/pyvenv/internal/pathutil"
 )
 
 // Provider is an interface that provides Python executables.
@@ -24,7 +26,7 @@ type Provider interface {
 //
 // This is a helper function for Provider implementations.
 func execsInPath(path string) ([]string, error) {
-	if !isDir(path) {
+	if !pathutil.IsDir(path) {
 		return nil, nil
 	}
 

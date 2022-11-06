@@ -3,6 +3,8 @@ package pythonfinder
 import (
 	"os"
 	"path/filepath"
+
+	"github.com/dhruvmanila/pyvenv/internal/pathutil"
 )
 
 // pyenvProvider is a Provider that finds Python executables in the
@@ -26,7 +28,7 @@ func newPyenvProvider() *pyenvProvider {
 		}
 		root = filepath.Join(homeDir, ".pyenv")
 	}
-	if stat, err := os.Stat(root); err != nil || !stat.IsDir() {
+	if !pathutil.IsDir(root) {
 		return nil
 	}
 	return &pyenvProvider{root: root}
@@ -34,7 +36,7 @@ func newPyenvProvider() *pyenvProvider {
 
 func (p *pyenvProvider) Executables() ([]string, error) {
 	versionDir := filepath.Join(p.root, "versions")
-	if !isDir(versionDir) {
+	if !pathutil.IsDir(versionDir) {
 		return nil, nil
 	}
 
@@ -50,7 +52,7 @@ func (p *pyenvProvider) Executables() ([]string, error) {
 			continue
 		}
 		binDir := filepath.Join(versionDir, entry.Name(), "bin")
-		if !isDir(binDir) {
+		if !pathutil.IsDir(binDir) {
 			continue
 		}
 		execs, err := execsInPath(binDir)

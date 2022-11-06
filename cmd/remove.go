@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/dhruvmanila/pyvenv/internal/pathutil"
 	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/spf13/cobra"
 )
@@ -28,7 +29,7 @@ var removeCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		if stat, err := os.Stat(p.VenvDir); err == nil && stat.IsDir() {
+		if pathutil.IsDir(p.VenvDir) {
 			fmt.Printf("Removing virtualenv (%s)...\n", green.Sprint(p.VenvDir))
 
 			var response string

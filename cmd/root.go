@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 
+	"github.com/dhruvmanila/pyvenv/internal/pathutil"
 	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -46,7 +47,7 @@ var rootCmd = &cobra.Command{
 					log.Fatal(err)
 				}
 
-				if stat, err := os.Stat(p.VenvDir); err == nil && stat.IsDir() {
+				if pathutil.IsDir(p.VenvDir) {
 					fmt.Println(p.VenvDir)
 					break
 				}

@@ -12,6 +12,7 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/dhruvmanila/pyvenv/internal/pathutil"
 	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/dhruvmanila/pyvenv/internal/pythonfinder"
 	"github.com/spf13/cobra"
@@ -37,7 +38,7 @@ The environment will be created using the builtin 'venv' module. If the
 			log.Fatal(err)
 		}
 
-		if stat, err := os.Stat(p.VenvDir); err == nil && stat.IsDir() {
+		if pathutil.IsDir(p.VenvDir) {
 			log.Fatal(red.Sprintf("✘ Virtualenv already exists for this project: %s", p.Name))
 		} else if errors.Is(err, fs.ErrNotExist) {
 			if err = createVenv(p); err != nil {
