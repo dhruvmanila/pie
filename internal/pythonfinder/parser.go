@@ -9,7 +9,7 @@ import (
 //
 // This only matches the final version numbers which are of the form
 // "major.minor.patch".
-var versionRegex = regexp.MustCompile(`^(\d+)\.(\d+)\.(\d+)$`)
+var versionRegex = regexp.MustCompile(`^(\d)\.(\d{1,2})\.(\d{1,2})$`)
 
 // parseVersion parses a Python version string of the form "major.minor.patch".
 //
