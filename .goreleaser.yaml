@@ -53,7 +53,7 @@ scoop:
   folder: scoop
   commit_msg_template: "chore(scoop): update to version {{ .Tag }}"
   homepage: https://github.com/dhruvmanila/pyvenv
-  description: Personal tool for managing Python virtual environments.
+  description: A tool for managing Python virtual environments.
   license: MIT
 
 brews:
@@ -63,7 +63,7 @@ brews:
     folder: HomebrewFormula
     homepage: https://github.com/dhruvmanila/pyvenv
     commit_msg_template: "chore(brew): update to version {{ .Tag }}"
-    description: Personal tool for managing Python virtual environments.
+    description: A tool for managing Python virtual environments.
     license: MIT
     install: |
       bin.install "pyvenv"
