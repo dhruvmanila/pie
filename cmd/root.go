@@ -11,7 +11,11 @@ import (
 )
 
 var (
-	noColor        bool
+	// noColor is a flag to disable color output.
+	noColor bool
+
+	// outputVenvInfo is a flag to output the absolute path to the
+	// virtual environment for the current project if there is any.
 	outputVenvInfo bool
 )
 
