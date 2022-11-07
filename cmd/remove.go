@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
-	"io/fs"
 	"log"
 	"os"
 	"strings"
@@ -29,28 +27,26 @@ var removeCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		if pathutil.IsDir(p.VenvDir) {
-			fmt.Printf("Removing virtualenv (%s)...\n", green.Sprint(p.VenvDir))
-
-			var response string
-			if !noConfirm {
-				fmt.Print("Proceed? [y/n]: ")
-				if _, err = fmt.Scan(&response); err != nil {
-					log.Fatal(err)
-				}
-			}
-
-			if noConfirm || strings.ToLower(strings.TrimSpace(response)) == "y" {
-				if err = os.RemoveAll(p.VenvDir); err != nil {
-					log.Fatal(err)
-				} else {
-					green.Println("✔ Successfully removed virtual environment!")
-				}
-			}
-		} else if errors.Is(err, fs.ErrNotExist) {
+		if !pathutil.IsDir(p.VenvDir) {
 			log.Fatal(red.Sprint("✘ No virtualenv has been created for this project yet!"))
-		} else if err != nil {
-			log.Fatal(err)
+		}
+
+		fmt.Printf("Removing virtualenv (%s)...\n", green.Sprint(p.VenvDir))
+
+		var response string
+		if !noConfirm {
+			fmt.Print("Proceed? [y/n]: ")
+			if _, err = fmt.Scan(&response); err != nil {
+				log.Fatal(err)
+			}
+		}
+
+		if noConfirm || strings.ToLower(strings.TrimSpace(response)) == "y" {
+			if err = os.RemoveAll(p.VenvDir); err != nil {
+				log.Fatal(err)
+			} else {
+				green.Println("✔ Successfully removed virtual environment!")
+			}
 		}
 	},
 }
