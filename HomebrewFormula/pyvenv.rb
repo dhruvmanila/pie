@@ -5,13 +5,13 @@
 class Pyvenv < Formula
   desc "Personal tool for managing Python virtual environments."
   homepage "https://github.com/dhruvmanila/pyvenv"
-  version "0.6.5"
+  version "0.7.0"
   license "MIT"
 
   on_macos do
-    if Hardware::CPU.intel?
-      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.6.5/pyvenv-0.6.5-darwin-amd64.tar.gz"
-      sha256 "7529f764cd94fe32724eb856036839cd357c21f5ac46763cf6725da2860cb050"
+    if Hardware::CPU.arm?
+      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.7.0/pyvenv-0.7.0-darwin-arm64.tar.gz"
+      sha256 "2d6977ae8d0af58f429315eb2716e8b11cc593f26de51e67d177113fab5a04f8"
 
       def install
         bin.install "pyvenv"
@@ -20,9 +20,9 @@ class Pyvenv < Formula
         fish_completion.install "completions/pyvenv.fish"
       end
     end
-    if Hardware::CPU.arm?
-      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.6.5/pyvenv-0.6.5-darwin-arm64.tar.gz"
-      sha256 "77459e090a401257d33c4222238064815da486ac8af352f29e64a9df77a77d03"
+    if Hardware::CPU.intel?
+      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.7.0/pyvenv-0.7.0-darwin-amd64.tar.gz"
+      sha256 "e0195fe9ebc291afcff72a5226f7ae8586657776f85ba770886810a3680bd4e4"
 
       def install
         bin.install "pyvenv"
@@ -35,8 +35,8 @@ class Pyvenv < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.6.5/pyvenv-0.6.5-linux-arm64.tar.gz"
-      sha256 "6e981a4f4d7d9a0697ea0143e1ff0822efb93fab6990c65c6003713f94358b68"
+      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.7.0/pyvenv-0.7.0-linux-arm64.tar.gz"
+      sha256 "37e6fa029f92946300d0b8244cb4423bfaffafeb259c1cefa059c8b2f9de1a2b"
 
       def install
         bin.install "pyvenv"
@@ -46,8 +46,8 @@ class Pyvenv < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.6.5/pyvenv-0.6.5-linux-amd64.tar.gz"
-      sha256 "9aa2d1be02bc1446e586d51dd88fad69df9ed8f6582e6dbc76923a5572fd2de1"
+      url "https://github.com/dhruvmanila/pyvenv/releases/download/v0.7.0/pyvenv-0.7.0-linux-amd64.tar.gz"
+      sha256 "0b12060585dc15c8271de17114259138590fb1d0444f277b1abab9887644d01c"
 
       def install
         bin.install "pyvenv"
