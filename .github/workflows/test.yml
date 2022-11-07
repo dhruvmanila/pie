@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "**/*.go"
+      - "go.mod"
+      - "go.sum"
+      - ".github/workflows/test.yml"
   pull_request:
 
 jobs:
