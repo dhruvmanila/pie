@@ -6,6 +6,15 @@ _A command-line tool to manage Python virtual environments_
 
 </div>
 
+> **Warning**
+> 
+> This tool is currently in **alpha**. There maybe breaking changes, although
+> I'll try to avoid it as much as possible and if I can't, I'll provide
+> clear instructions to migrate in the release notes. These changes will only
+> be limited to a minor release.
+> 
+> I also plan to change the tool name to avoid any misunderstanding and conflict.
+
 ## Overview
 
 `pyvenv` is a command-line tool to create and manage multiple Python virtual
