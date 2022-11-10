@@ -24,8 +24,15 @@ type Project struct {
 	VenvDir string
 }
 
-// New creates a new project for the given path.
+// New creates a new project for the given path after evaluating all the
+// symlinks in the path. The given path must be an absolute path.
 func New(path string) (*Project, error) {
+	var err error
+	path, err = filepath.EvalSymlinks(path)
+	if err != nil {
+		return nil, err
+	}
+
 	_, name := filepath.Split(path)
 
 	hash, err := hashPath(path)
@@ -41,15 +48,9 @@ func New(path string) (*Project, error) {
 	}, err
 }
 
-// NewFromWd creates a new project from the current working directory after
-// evaluating all the symlinks in the path.
+// NewFromWd creates a new project from the current working directory.
 func NewFromWd() (*Project, error) {
 	dir, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-
-	dir, err = filepath.EvalSymlinks(dir)
 	if err != nil {
 		return nil, err
 	}
