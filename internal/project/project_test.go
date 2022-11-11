@@ -101,8 +101,8 @@ func TestCurrentProjectWithVenv(t *testing.T) {
 		t.Fatalf("hashPath(%q) error = %v", parent, err)
 	}
 
-	// Create a virtual environment directory for charlie.
-	venvDir := filepath.Join(xdg.DataDir, "charlie-"+hash[:8])
+	// Create a virtual environment directory for parent project.
+	venvDir := filepath.Join(xdg.DataDir, "parent-"+hash[:8])
 	if err = os.MkdirAll(venvDir, 0o755); err != nil {
 		t.Fatalf("MkdirAll(%q) error = %v", venvDir, err)
 	}
@@ -115,7 +115,7 @@ func TestCurrentProjectWithVenv(t *testing.T) {
 		t.Errorf("Current() error = %v, want nil", err)
 	}
 	if p == nil {
-		t.Errorf("Current() = nil, want non-nil")
+		t.Fatal("Current() = nil, want non-nil")
 	}
 
 	verifyProject(t, p, parent, "Current")
@@ -129,7 +129,7 @@ func TestCurrentProjectWithVenv(t *testing.T) {
 		t.Errorf("Current() error = %v, want nil", err)
 	}
 	if p == nil {
-		t.Errorf("Current() = nil, want non-nil")
+		t.Fatal("Current() = nil, want non-nil")
 	}
 
 	// The virtual environment is for the parent project, so verify that
