@@ -1,6 +1,8 @@
 package project
 
 import (
+	"bytes"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -34,6 +36,29 @@ func chdir(t *testing.T, dir string) {
 			t.Fatalf("chdir to original working directory %s: %v", olddir, err)
 		}
 	})
+}
+
+// setupVenvDir creates a virtual environment directory for the given project
+// and returns the path to the virtual environment directory. The venv directory
+// will be removed at the end of the test.
+func setupVenvDir(t *testing.T, dir string) string {
+	hash, err := hashPath(dir)
+	if err != nil {
+		t.Fatalf("hashPath(%q) error = %v", dir, err)
+	}
+
+	_, name := filepath.Split(dir)
+	venvDir := filepath.Join(xdg.DataDir, fmt.Sprintf("%s-%s", name, hash[:8]))
+	if err = os.MkdirAll(venvDir, 0o755); err != nil {
+		t.Fatalf("MkdirAll(%q) error = %v", venvDir, err)
+	}
+
+	t.Cleanup(func() {
+		if err := os.RemoveAll(venvDir); err != nil {
+			t.Fatalf("RemoveAll(%q) error = %v", venvDir, err)
+		}
+	})
+	return venvDir
 }
 
 func verifyProject(t *testing.T, p *Project, dir string, newFunc string) {
@@ -96,18 +121,7 @@ func TestCurrentProjectNoVenv(t *testing.T) {
 
 func TestCurrentProjectWithVenv(t *testing.T) {
 	parent := filepath.Join(testdataDir, "parent")
-	hash, err := hashPath(parent)
-	if err != nil {
-		t.Fatalf("hashPath(%q) error = %v", parent, err)
-	}
-
-	// Create a virtual environment directory for parent project.
-	venvDir := filepath.Join(xdg.DataDir, "parent-"+hash[:8])
-	if err = os.MkdirAll(venvDir, 0o755); err != nil {
-		t.Fatalf("MkdirAll(%q) error = %v", venvDir, err)
-	}
-	defer os.RemoveAll(venvDir)
-
+	setupVenvDir(t, parent)
 	chdir(t, parent)
 
 	p, err := Current()
@@ -135,4 +149,34 @@ func TestCurrentProjectWithVenv(t *testing.T) {
 	// The virtual environment is for the parent project, so verify that
 	// it traverses up the directory tree to find the parent project.
 	verifyProject(t, p, parent, "Current")
+}
+
+func TestWriteProjectFile(t *testing.T) {
+	alpha := filepath.Join(testdataDir, "alpha")
+	venvDir := setupVenvDir(t, alpha)
+
+	p, err := New(alpha)
+	if err != nil {
+		t.Fatalf("New(%q) error = %v, want nil", alpha, err)
+	}
+
+	// Write the project file.
+	if err = p.WriteProjectFile(); err != nil {
+		t.Fatalf("WriteProjectFile() error = %v, want nil", err)
+	}
+
+	// Verify that the project file was written.
+	projectFile := filepath.Join(venvDir, ".project")
+	if _, err = os.Stat(projectFile); err != nil {
+		t.Fatalf("Stat(%q) error = %v, want nil", projectFile, err)
+	}
+
+	// Verify that the project file contains the project path.
+	b, err := os.ReadFile(projectFile)
+	if err != nil {
+		t.Fatalf("ReadFile(%q) error = %v, want nil", projectFile, err)
+	}
+	if !bytes.Equal(b, []byte(alpha)) {
+		t.Errorf("ReadFile(%q) = %q, want %q", projectFile, b, p.Path)
+	}
 }
