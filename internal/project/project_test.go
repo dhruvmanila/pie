@@ -1,4 +1,4 @@
-package project_test
+package project
 
 import (
 	"os"
@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/dhruvmanila/pyvenv/internal/xdg"
 )
 
@@ -37,7 +36,7 @@ func chdir(t *testing.T, dir string) {
 	})
 }
 
-func verifyProject(t *testing.T, p *project.Project, dir string, newFunc string) {
+func verifyProject(t *testing.T, p *Project, dir string, newFunc string) {
 	_, projectName := filepath.Split(dir)
 	if !strings.HasPrefix(p.Name, projectName) {
 		t.Errorf("%s(%q).Name = %q, want %s*", newFunc, dir, p.Name, projectName)
@@ -55,7 +54,7 @@ func verifyProject(t *testing.T, p *project.Project, dir string, newFunc string)
 
 func TestNewProject(t *testing.T) {
 	alpha := filepath.Join(testdataDir, "alpha")
-	p, err := project.New(alpha)
+	p, err := New(alpha)
 	if err != nil {
 		t.Fatalf("New(%q) error = %v, want nil", alpha, err)
 	}
@@ -63,7 +62,7 @@ func TestNewProject(t *testing.T) {
 	verifyProject(t, p, alpha, "New")
 
 	beta := filepath.Join(testdataDir, "beta")
-	p, err = project.New(beta)
+	p, err = New(beta)
 	if err != nil {
 		t.Fatalf("New(%q) error = %v, want nil", beta, err)
 	}
@@ -72,10 +71,68 @@ func TestNewProject(t *testing.T) {
 	verifyProject(t, p, alpha, "New")
 
 	chdir(t, alpha)
-	p, err = project.NewFromWd()
+	p, err = NewFromWd()
 	if err != nil {
 		t.Fatalf("NewFromWd(%q) error = %v, want nil", alpha, err)
 	}
 
 	verifyProject(t, p, alpha, "NewFromWd")
+}
+
+func TestCurrentProjectNoVenv(t *testing.T) {
+	alpha := filepath.Join(testdataDir, "alpha")
+
+	// Alpha does not have a virtual environment associated with it.
+	chdir(t, alpha)
+
+	p, err := Current()
+	if err != nil {
+		t.Errorf("Current() error = %v, want nil", err)
+	}
+	if p != nil {
+		t.Errorf("Current() = %v, want nil", p)
+	}
+}
+
+func TestCurrentProjectWithVenv(t *testing.T) {
+	parent := filepath.Join(testdataDir, "parent")
+	hash, err := hashPath(parent)
+	if err != nil {
+		t.Fatalf("hashPath(%q) error = %v", parent, err)
+	}
+
+	// Create a virtual environment directory for charlie.
+	venvDir := filepath.Join(xdg.DataDir, "charlie-"+hash[:8])
+	if err = os.MkdirAll(venvDir, 0o755); err != nil {
+		t.Fatalf("MkdirAll(%q) error = %v", venvDir, err)
+	}
+	defer os.RemoveAll(venvDir)
+
+	chdir(t, parent)
+
+	p, err := Current()
+	if err != nil {
+		t.Errorf("Current() error = %v, want nil", err)
+	}
+	if p == nil {
+		t.Errorf("Current() = nil, want non-nil")
+	}
+
+	verifyProject(t, p, parent, "Current")
+
+	// Child is a subdirectory of parent.
+	child := filepath.Join(parent, "child")
+	chdir(t, child)
+
+	p, err = Current()
+	if err != nil {
+		t.Errorf("Current() error = %v, want nil", err)
+	}
+	if p == nil {
+		t.Errorf("Current() = nil, want non-nil")
+	}
+
+	// The virtual environment is for the parent project, so verify that
+	// it traverses up the directory tree to find the parent project.
+	verifyProject(t, p, parent, "Current")
 }
