@@ -1,14 +1,12 @@
 package cmd
 
 import (
-	"bufio"
-	"bytes"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 
+	"github.com/dhruvmanila/pyvenv/internal/venv"
 	"github.com/dhruvmanila/pyvenv/internal/xdg"
 	"github.com/spf13/cobra"
 )
@@ -24,21 +22,30 @@ var listCmd = &cobra.Command{
 	Run: func(_ *cobra.Command, _ []string) {
 		fmt.Printf("Root directory: %s\n", green.Sprint(xdg.DataDir))
 
-		venvs, err := getVenvs(xdg.DataDir)
+		venvNames, err := venv.Names()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		_, currentVenv := filepath.Split(os.Getenv("VIRTUAL_ENV"))
-		for _, venv := range venvs {
+		_, currentVenvName := filepath.Split(os.Getenv("VIRTUAL_ENV"))
+		for _, venvName := range venvNames {
 			var line string
-			if currentVenv == venv.Name {
-				line += bold.Sprint("* " + venv.Name)
+			if venvName == currentVenvName {
+				line += bold.Sprint("* " + venvName)
 			} else {
-				line += bold.Sprint("  " + venv.Name)
+				line += bold.Sprint("  " + venvName)
 			}
 			if verbose {
-				line += yellowBold.Sprintf(" (%s)", venv.Version) + faint.Sprintf(" (%s)", venv.Project)
+				venvDir := filepath.Join(xdg.DataDir, venvName)
+				projectPath, err := venv.ProjectPath(venvDir)
+				if err != nil {
+					log.Fatal(err)
+				}
+				pythonVersion, err := venv.PythonVersion(venvDir)
+				if err != nil {
+					log.Fatal(err)
+				}
+				line += yellowBold.Sprintf(" (%s)", pythonVersion) + faint.Sprintf(" (%s)", projectPath)
 			}
 			fmt.Println(line)
 		}
@@ -48,100 +55,4 @@ var listCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(listCmd)
 	listCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "output additional venv information")
-}
-
-// VirtualEnv contains information regarding a single virtual environment
-// managed by the tool.
-type VirtualEnv struct {
-	// Name is the virtual environment name.
-	Name string
-
-	// Path is the absolute path to the virtual environment directory.
-	Path string
-
-	// Project is the absolute path to the project this virtual environment
-	// belongs to.
-	Project string
-
-	// Version is the Python version this environment was created from.
-	Version string
-}
-
-// getVenvs returns information regarding all the managed virtual environments.
-func getVenvs(dataDir string) ([]*VirtualEnv, error) {
-	entries, err := os.ReadDir(dataDir)
-	if err != nil {
-		return nil, err
-	}
-
-	var venvs []*VirtualEnv
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
-
-		venvName := entry.Name()
-		venvDir := filepath.Join(dataDir, venvName)
-
-		var projectPath, pythonVersion string
-
-		// Only compute when necessary.
-		if verbose {
-			projectPath, err = readProjectFile(venvDir)
-			if err != nil {
-				return nil, err
-			}
-
-			pythonVersion, err = getPythonVersionFromConfig(venvDir)
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		venvs = append(venvs, &VirtualEnv{
-			Name:    venvName,
-			Path:    venvDir,
-			Project: projectPath,
-			Version: pythonVersion,
-		})
-	}
-
-	return venvs, nil
-}
-
-// readProjectFile reads and returns the content of the project file
-// present in the given virtual environment directory.
-func readProjectFile(venvDir string) (string, error) {
-	projectFilePath := filepath.Join(venvDir, ".project")
-	content, err := os.ReadFile(projectFilePath)
-	if err != nil {
-		return "", err
-	}
-	content = bytes.TrimRight(content, "\n")
-	return string(content), nil
-}
-
-// getPythonVersionFromConfig returns the Python version used to create
-// the virtual environment.
-//
-// The version string is read from the environment config file present
-// in the given environment directory.
-func getPythonVersionFromConfig(venvDir string) (string, error) {
-	pyvenvPath := filepath.Join(venvDir, "pyvenv.cfg")
-
-	file, err := os.Open(pyvenvPath)
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		pairs := strings.Split(scanner.Text(), "=")
-		if strings.TrimSpace(pairs[0]) == "version" {
-			return strings.TrimSpace(pairs[1]), nil
-		}
-	}
-
-	return "", fmt.Errorf("%q: venv config file does not contain 'version' key", pyvenvPath)
 }
