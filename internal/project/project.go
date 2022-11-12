@@ -91,18 +91,10 @@ func Current() (*Project, error) {
 // environment. This is done by writing the absolute path to the project
 // directory in a ".project" file inside the virtual environment directory.
 func (p *Project) WriteProjectFile() error {
-	projectFilePath := filepath.Join(p.VenvDir, ".project")
-	f, err := os.OpenFile(projectFilePath, os.O_WRONLY|os.O_CREATE, 0o644)
+	err := os.WriteFile(filepath.Join(p.VenvDir, ".project"), []byte(p.Path), 0o644)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-
-	_, err = f.WriteString(p.Path)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
