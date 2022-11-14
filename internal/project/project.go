@@ -91,11 +91,7 @@ func Current() (*Project, error) {
 // environment. This is done by writing the absolute path to the project
 // directory in a ".project" file inside the virtual environment directory.
 func (p *Project) WriteProjectFile() error {
-	err := os.WriteFile(filepath.Join(p.VenvDir, ".project"), []byte(p.Path), 0o644)
-	if err != nil {
-		return err
-	}
-	return nil
+	return os.WriteFile(filepath.Join(p.VenvDir, ".project"), []byte(p.Path), 0o644)
 }
 
 // hashPath returns the hash value of the given path string. It uses the SHA 256
