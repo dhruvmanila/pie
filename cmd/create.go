@@ -128,7 +128,7 @@ func createVenv(p *project.Project) error {
 		// Ensure that the virtual environment is deleted if we received
 		// a signal to cancel the command.
 		os.RemoveAll(p.VenvDir)
-		log.Fatal(red.Sprint("Environment creationg aborted!"))
+		log.Fatal(red.Sprint("Environment creation aborted!"))
 	}
 
 	// There was no signal received, so we can safely check the error.
