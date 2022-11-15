@@ -24,6 +24,22 @@ func New() *finder {
 // This function returns ErrVersionNotFound if no version matching the given
 // version is found or there is no Python version installed on the system.
 func (f *finder) Find(version string) (*PythonVersion, error) {
+	versions, err := f.find(version, 1)
+	if err != nil {
+		return nil, err
+	}
+	// There is going to be exactly one version in the slice. This is ensured
+	// by the find() function. Otherwise, it would return ErrVersionNotFound.
+	return versions[0], nil
+}
+
+// FindAll returns all the Python versions available on the system which can be
+// found by the providers.
+func (f *finder) FindAll() ([]*PythonVersion, error) {
+	return f.find("", -1)
+}
+
+func (f *finder) find(version string, n int) ([]*PythonVersion, error) {
 	var versionInfo *VersionInfo
 
 	if version != "" {
@@ -34,6 +50,9 @@ func (f *finder) Find(version string) (*PythonVersion, error) {
 		}
 	}
 
+	var versions []*PythonVersion
+
+ProviderLoop:
 	for _, p := range f.providers {
 		executables, err := p.Executables()
 		if err != nil {
@@ -61,19 +80,24 @@ func (f *finder) Find(version string) (*PythonVersion, error) {
 
 			if versionInfo != nil {
 				if pythonVersion.Matches(versionInfo) {
-					return pythonVersion, nil
+					versions = append(versions, pythonVersion)
 				}
 			} else {
-				// If no version was specified by the user, we return the first
-				// Python version we find.
-				return pythonVersion, nil
+				versions = append(versions, pythonVersion)
+			}
+
+			if n > 0 && len(versions) == n {
+				break ProviderLoop
 			}
 		}
 	}
 
 	// This either means that the version provided by the user does not exist,
 	// or there is no version of Python installed on the system.
-	return nil, ErrVersionNotFound
+	if len(versions) == 0 {
+		return nil, ErrVersionNotFound
+	}
+	return versions, nil
 }
 
 func (f *finder) setupProviders() {
