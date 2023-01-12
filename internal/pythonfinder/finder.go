@@ -111,5 +111,8 @@ func (f *finder) setupProviders() {
 		if p := newPyenvProvider(); p != nil {
 			f.providers = append(f.providers, p)
 		}
+		if p := newAsdfProvider(); p != nil {
+			f.providers = append(f.providers, p)
+		}
 	}
 }
