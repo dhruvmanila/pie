@@ -6,9 +6,10 @@ import (
 	"os"
 	"strings"
 
+	"github.com/spf13/cobra"
+
 	"github.com/dhruvmanila/pyvenv/internal/pathutil"
 	"github.com/dhruvmanila/pyvenv/internal/project"
-	"github.com/spf13/cobra"
 )
 
 // noConfirm is a flag to skip the confirmation prompt for removing a

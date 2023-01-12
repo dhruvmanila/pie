@@ -11,10 +11,11 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/spf13/cobra"
+
 	"github.com/dhruvmanila/pyvenv/internal/pathutil"
 	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/dhruvmanila/pyvenv/internal/pythonfinder"
-	"github.com/spf13/cobra"
 )
 
 // pythonVersion is the Python version to use for creating the virtual environment.

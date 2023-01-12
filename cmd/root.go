@@ -5,9 +5,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/dhruvmanila/pyvenv/internal/project"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+
+	"github.com/dhruvmanila/pyvenv/internal/project"
 )
 
 var (

@@ -6,9 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/spf13/cobra"
+
 	"github.com/dhruvmanila/pyvenv/internal/venv"
 	"github.com/dhruvmanila/pyvenv/internal/xdg"
-	"github.com/spf13/cobra"
 )
 
 // verbose is a flag used to output additional environment information.
