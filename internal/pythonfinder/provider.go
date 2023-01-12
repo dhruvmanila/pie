@@ -1,6 +1,7 @@
 package pythonfinder
 
 import (
+	"io/fs"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -46,8 +47,11 @@ func execsInPath(path string) ([]string, error) {
 		if err != nil {
 			return nil, err
 		}
-
-		if !isExecutable(resolvedPath) {
+		info, err := os.Stat(resolvedPath)
+		if err != nil {
+			return nil, err
+		}
+		if !isExecutable(info) {
 			continue
 		}
 		execs = append(execs, resolvedPath)
@@ -62,14 +66,11 @@ func looksLikePython(name string) bool {
 	return pythonFileRegex.MatchString(name)
 }
 
-// isExecutable returns true if the given file path is executable.
+// isExecutable returns true if the given file info is executable.
 // On Windows, it just checks if the file extension is ".exe" or not.
-func isExecutable(path string) bool {
+func isExecutable(info fs.FileInfo) bool {
 	if runtime.GOOS == "windows" {
-		return strings.ToLower(filepath.Ext(path)) == ".exe"
+		return strings.ToLower(filepath.Ext(info.Name())) == ".exe"
 	}
-	if info, err := os.Stat(path); err == nil {
-		return info.Mode().IsRegular() && info.Mode()&0o111 != 0
-	}
-	return false
+	return info.Mode().IsRegular() && info.Mode()&0o111 != 0
 }
