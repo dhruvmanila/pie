@@ -52,6 +52,11 @@ func (f *finder) find(version string, n int) ([]*PythonVersion, error) {
 
 	var versions []*PythonVersion
 
+	// seen is a set of Python executables which were already seen by the
+	// providers. This is used to avoid returning duplicate Python versions.
+	// This contains the absolute path to the Python executable.
+	seen := make(map[string]struct{})
+
 ProviderLoop:
 	for _, p := range f.providers {
 		executables, err := p.Executables()
@@ -60,6 +65,11 @@ ProviderLoop:
 		}
 
 		for _, executable := range executables {
+			if _, ok := seen[executable]; ok {
+				continue
+			}
+			seen[executable] = struct{}{}
+
 			pythonVersion, err := newPythonVersion(executable)
 			if err != nil {
 				// The executable could come from a Python version which is not
