@@ -52,9 +52,6 @@ func (p *pyenvProvider) Executables() ([]string, error) {
 			continue
 		}
 		binDir := filepath.Join(versionDir, entry.Name(), "bin")
-		if !pathutil.IsDir(binDir) {
-			continue
-		}
 		execs, err := execsInPath(binDir)
 		if err != nil {
 			return nil, err

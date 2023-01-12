@@ -102,6 +102,11 @@ ProviderLoop:
 
 func (f *finder) setupProviders() {
 	f.providers = append(f.providers, newPathProvider())
+	if runtime.GOOS == "darwin" {
+		if p := newMacOSProvider(); p != nil {
+			f.providers = append(f.providers, p)
+		}
+	}
 	if runtime.GOOS != "windows" {
 		if p := newPyenvProvider(); p != nil {
 			f.providers = append(f.providers, p)
