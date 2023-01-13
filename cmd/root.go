@@ -23,7 +23,7 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "pyvenv",
 	Short: "A tool to manage Python virtual environments.",
-	Run: func(_ *cobra.Command, _ []string) {
+	Run: func(cmd *cobra.Command, _ []string) {
 		if outputVenvInfo {
 			p, err := project.Current()
 			if err != nil {
@@ -33,6 +33,9 @@ var rootCmd = &cobra.Command{
 			if p != nil {
 				fmt.Println(p.VenvDir)
 			}
+			// Print the help message if no arguments are provided.
+		} else if err := cmd.Help(); err != nil {
+			log.Fatal(err)
 		}
 	},
 }
