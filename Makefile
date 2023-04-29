@@ -1,7 +1,7 @@
 # By default, run the 'build' target.
 .DEFAULT_GOAL = build
 
-BIN := pyvenv
+BIN := pie
 
 .PHONY: build
 build: ## Build the binary

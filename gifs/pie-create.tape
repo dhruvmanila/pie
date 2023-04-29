@@ -1,4 +1,4 @@
-Output pyvenv-create.gif
+Output pie-create.gif
 
 Set Height 400
 Set Width 1300
@@ -15,14 +15,14 @@ Enter
 Show
 
 # Demo
-Type "pyvenv create" Sleep 0.5
+Type "pie create" Sleep 0.5
 Enter
 # Wait until the environment is created and a bit more
 Sleep 10
 
 # Teardown
 Hide
-Type "pyvenv rm --yes"
+Type "pie rm --yes"
 Enter
 Type "cd .."
 Enter

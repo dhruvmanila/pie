@@ -1,5 +1,5 @@
 ---
-project_name: pyvenv
+project_name: pie
 
 before:
   hooks:
@@ -49,26 +49,26 @@ changelog:
 scoop:
   bucket:
     owner: dhruvmanila
-    name: pyvenv
+    name: pie
   folder: scoop
   commit_msg_template: "chore(scoop): update to version {{ .Tag }}"
-  homepage: https://github.com/dhruvmanila/pyvenv
+  homepage: https://github.com/dhruvmanila/pie
   description: A tool for managing Python virtual environments.
   license: MIT
 
 brews:
   - tap:
       owner: dhruvmanila
-      name: pyvenv
+      name: pie
     folder: HomebrewFormula
-    homepage: https://github.com/dhruvmanila/pyvenv
+    homepage: https://github.com/dhruvmanila/pie
     commit_msg_template: "chore(brew): update to version {{ .Tag }}"
     description: A tool for managing Python virtual environments.
     license: MIT
     install: |
-      bin.install "pyvenv"
-      bash_completion.install "completions/pyvenv.bash" => "pyvenv"
-      zsh_completion.install "completions/pyvenv.zsh" => "_pyvenv"
-      fish_completion.install "completions/pyvenv.fish"
+      bin.install "pie"
+      bash_completion.install "completions/pie.bash" => "pie"
+      zsh_completion.install "completions/pie.zsh" => "_pie"
+      fish_completion.install "completions/pie.fish"
     test: |
-      system "#{bin}/pyvenv --version"
+      system "#{bin}/pie --version"

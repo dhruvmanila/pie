@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/dhruvmanila/pyvenv/internal/pythonfinder"
-	"github.com/dhruvmanila/pyvenv/internal/venv"
-	"github.com/dhruvmanila/pyvenv/internal/xdg"
+	"github.com/dhruvmanila/pie/internal/pythonfinder"
+	"github.com/dhruvmanila/pie/internal/venv"
+	"github.com/dhruvmanila/pie/internal/xdg"
 )
 
 var (

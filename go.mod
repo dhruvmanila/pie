@@ -1,4 +1,4 @@
-module github.com/dhruvmanila/pyvenv
+module github.com/dhruvmanila/pie
 
 go 1.19
 

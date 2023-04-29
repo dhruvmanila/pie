@@ -10,9 +10,9 @@ import (
 	"github.com/adrg/xdg"
 )
 
-const appName = "pyvenv"
+const appName = "pie"
 
-// DataDir defines the directory where pyvenv stores all the virtual
+// DataDir defines the directory where `pie` stores all the virtual
 // environments.
 var DataDir string
 

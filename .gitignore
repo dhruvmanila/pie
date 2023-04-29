@@ -1,5 +1,5 @@
-pyvenv
-pyvenv.exe
+pie
+pie.exe
 local/
 dist/
 completions/

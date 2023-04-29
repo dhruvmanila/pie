@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dhruvmanila/pyvenv/internal/xdg"
+	"github.com/dhruvmanila/pie/internal/xdg"
 )
 
 func TestDataDir(t *testing.T) {

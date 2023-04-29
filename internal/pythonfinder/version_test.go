@@ -99,7 +99,6 @@ func TestHelperProcess(t *testing.T) {
 		return
 	}
 
-	args := os.Args
 	cmd, args := os.Args[3], os.Args[4:]
 
 	if !strings.HasSuffix(cmd, "python") {

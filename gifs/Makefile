@@ -7,3 +7,7 @@ all: $(GIFS)
 
 $(GIFS): %.gif: %.tape
 	$(VHS) $<
+
+.PHONY: clean
+clean:
+	rm *.gif

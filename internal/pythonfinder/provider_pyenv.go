@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/dhruvmanila/pyvenv/internal/pathutil"
+	"github.com/dhruvmanila/pie/internal/pathutil"
 )
 
 // pyenvProvider is a Provider that finds Python executables in the

@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/dhruvmanila/pyvenv/internal/xdg"
+	"github.com/dhruvmanila/pie/internal/xdg"
 )
 
 var testdataDir string

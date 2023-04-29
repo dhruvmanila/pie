@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/dhruvmanila/pyvenv/internal/pathutil"
+	"github.com/dhruvmanila/pie/internal/pathutil"
 )
 
 const versionDir = "/Library/Frameworks/Python.framework/Versions"

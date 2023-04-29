@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/dhruvmanila/pyvenv/internal/pathutil"
+	"github.com/dhruvmanila/pie/internal/pathutil"
 )
 
 // Provider is an interface that provides Python executables.

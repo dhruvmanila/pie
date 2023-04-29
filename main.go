@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/dhruvmanila/pyvenv/cmd"
+	"github.com/dhruvmanila/pie/cmd"
 )
 
 // version is the current tool version. This is populated by goreleaser while

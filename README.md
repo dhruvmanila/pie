@@ -1,23 +1,23 @@
 <div align="center">
 
-# pyvenv
+# pie
 
 _A command-line tool to manage Python virtual environments_
 
 </div>
 
 > **Warning**
-> 
+>
 > This tool is currently in **alpha**. There maybe breaking changes, although
 > I'll try to avoid it as much as possible and if I can't, I'll provide
 > clear instructions to migrate in the release notes. These changes will only
 > be limited to a minor release.
-> 
+>
 > I also plan to change the tool name to avoid any misunderstanding and conflict.
 
 ## Overview
 
-`pyvenv` is a command-line tool to create and manage multiple Python virtual
+`pie` is a command-line tool to create and manage multiple Python virtual
 environments. Some of the features are listed below:
 
 - Single tool to manage all the environments
@@ -32,14 +32,14 @@ environments. Some of the features are listed below:
 ### Using [Homebrew](https://brew.sh/)/[Linuxbrew](https://docs.brew.sh/Homebrew-on-Linux) on macOS/Linux:
 
 ```sh
-brew tap dhruvmanila/pyvenv https://github.com/dhruvmanila/pyvenv
-brew install pyvenv
+brew tap dhruvmanila/pie https://github.com/dhruvmanila/pie
+brew install pie
 ```
 
 ### Using [scoop](https://scoop.sh/) on Windows:
 
 ```sh
-scoop install https://raw.githubusercontent.com/dhruvmanila/pyvenv/main/scoop/pyvenv.json
+scoop install https://raw.githubusercontent.com/dhruvmanila/pie/main/scoop/pie.json
 ```
 
 ### Build from source
@@ -49,55 +49,55 @@ Recent [Go](https://go.dev/) toolchain is necessary to build from source. Use Go
 
 ```sh
 # Install the latest stable version
-go install github.com/dhruvmanila/pyvenv@latest
+go install github.com/dhruvmanila/pie@latest
 
 # Install the head of main branch
-go install github.com/dhruvmanila/pyvenv
+go install github.com/dhruvmanila/pie
 ```
 
 You can also download a binary from the
-[releases](https://github.com/dhruvmanila/pyvenv/releases/latest) page.
+[releases](https://github.com/dhruvmanila/pie/releases/latest) page.
 
 ## Usage
 
 To create an environment using the default Python version:
 
 ```bash
-pyvenv create
+pie create
 ```
 <p>
-<img src='./gifs/pyvenv-create.gif' alt='pyvenv-create-gif' />
+<img src='./gifs/pie-create.gif' alt='pie-create-gif' />
 </p>
 <br>
 
 To create an environment using a specific Python version:
 
 ```bash
-pyvenv create --python 3.11.0
+pie create --python 3.11.0
 ```
 
 <p>
-<img src='./gifs/pyvenv-create--python.gif' alt='pyvenv-create--python-gif' />
+<img src='./gifs/pie-create--python.gif' alt='pie-create--python-gif' />
 </p>
 <br>
 
 List out all the managed environments:
 
 ```bash
-pyvenv list  # or pyvenv ls
+pie list  # or pie ls
 ```
 Use the `--verbose` flag to show
 information such as the Python version and project path.
 
 <p>
-<img src='./gifs/pyvenv-ls.gif' alt='pyvenv-ls-gif' />
+<img src='./gifs/pie-ls.gif' alt='pie-ls-gif' />
 </p>
 <br>
 
 Delete a virtualenv for the current project:
 
 ```bash
-pyvenv remove  # or pyvenv rm
+pie remove  # or pie rm
 ```
 
 The `remove` command will only work from within the project directory for which
@@ -105,7 +105,7 @@ the virtual envionment was created for. The confirmation prompt can be skipped
 with the `--yes` flag.
 
 <p>
-<img src='./gifs/pyvenv-rm.gif' alt='pyvenv-rm-gif' />
+<img src='./gifs/pie-rm.gif' alt='pie-rm-gif' />
 </p>
 <br>
 
@@ -122,11 +122,11 @@ working directory. In case there's no environment associated with the current
 working directory, it will exit with code 1 without printing anything.
 
 ```bash
-pyvenv --venv
+pie --venv
 ```
 
 <p>
-<img src='./gifs/pyvenv--venv.gif' alt='pyvenv--venv-gif' />
+<img src='./gifs/pie--venv.gif' alt='pie--venv-gif' />
 </p>
 <br>
 
@@ -139,11 +139,11 @@ Based on your preferred shell, you can use either of the following:
 #### PowerShell
 
 ```powershell
-# Activate a Python virtual environment built using the `pyvenv` command.
-# https://github.com/dhruvmanila/pyvenv
-function Pyvenv-Activate() {
-  if (Get-Command -Name pyvenv -ErrorAction SilentlyContinue) {
-    $VenvDir = (pyvenv --venv)
+# Activate a Python virtual environment built using the `pie` command.
+# https://github.com/dhruvmanila/pie
+function Pie-Activate() {
+  if (Get-Command -Name pie -ErrorAction SilentlyContinue) {
+    $VenvDir = (pie --venv)
     if ($VenvDir) {
       Invoke-Expression -Command "$VenvDir/Scripts/Activate.ps1"
     }
@@ -151,21 +151,21 @@ function Pyvenv-Activate() {
 }
 
 # Alias it for quick activation
-Set-Alias a Pyvenv-Activate
+Set-Alias a Pie-Activate
 ```
 
 #### bash/zsh
 
 ```sh
-pyvenv_activate() {
-  # Activate a Python virtual environment built using the `pyvenv` command.
-  # https://github.com/dhruvmanila/pyvenv
+pie_activate() {
+  # Activate a Python virtual environment built using the `pie` command.
+  # https://github.com/dhruvmanila/pie
   #
   # The activation part cannot be a script as that is executed in a subshell
   # and so the `source` part will also be executed in the subshell instead of
   # the current shell.
-  if command -v pyvenv > /dev/null 2>&1; then
-    VENV_DIR=$(pyvenv --venv 2> /dev/null)
+  if command -v pie > /dev/null 2>&1; then
+    VENV_DIR=$(pie --venv 2> /dev/null)
     if [ -n "$VENV_DIR" ]; then
       . "$VENV_DIR/bin/activate"
     fi
@@ -173,7 +173,7 @@ pyvenv_activate() {
 }
 
 # Alias it for quick activation
-alias a="pyvenv_activate"
+alias a="pie_activate"
 ```
 
 #### fish
@@ -198,7 +198,7 @@ This will create the release binary for your system in a `dist/` folder.
 
 The release is automated using [`goreleaser`](https://goreleaser.com/) and
 GitHub Actions using this
-[workflow](https://github.com/dhruvmanila/pyvenv/blob/main/.github/workflows/release.yml).
+[workflow](https://github.com/dhruvmanila/pie/blob/main/.github/workflows/release.yml).
 It can be triggered by pushing the next version tag on GitHub. This will also
 update the Homebrew and scoop package specification.
 

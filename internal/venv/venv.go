@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/dhruvmanila/pyvenv/internal/xdg"
+	"github.com/dhruvmanila/pie/internal/xdg"
 )
 
 // Names returns the names of all the managed virtual environments in a

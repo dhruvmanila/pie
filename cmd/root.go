@@ -8,7 +8,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
-	"github.com/dhruvmanila/pyvenv/internal/project"
+	"github.com/dhruvmanila/pie/internal/project"
 )
 
 var (
@@ -21,7 +21,7 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "pyvenv",
+	Use:   "pie",
 	Short: "A tool to manage Python virtual environments.",
 	Run: func(cmd *cobra.Command, _ []string) {
 		if outputVenvInfo {

@@ -8,8 +8,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/dhruvmanila/pyvenv/internal/pathutil"
-	"github.com/dhruvmanila/pyvenv/internal/project"
+	"github.com/dhruvmanila/pie/internal/pathutil"
+	"github.com/dhruvmanila/pie/internal/project"
 )
 
 // noConfirm is a flag to skip the confirmation prompt for removing a

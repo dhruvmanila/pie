@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/dhruvmanila/pyvenv/internal/pathutil"
-	"github.com/dhruvmanila/pyvenv/internal/xdg"
+	"github.com/dhruvmanila/pie/internal/pathutil"
+	"github.com/dhruvmanila/pie/internal/xdg"
 )
 
 // Project contains information regarding a specific project for which the

@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dhruvmanila/pyvenv/internal/pathutil"
+	"github.com/dhruvmanila/pie/internal/pathutil"
 )
 
 func TestIsDir(t *testing.T) {
