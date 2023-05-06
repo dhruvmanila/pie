@@ -15,6 +15,10 @@ clean: ## Remove build artifacts
 tidy: ## Tidy the module
 	go mod tidy
 
+.PHONY: test
+test: ## Run the tests
+	go test ./... -v
+
 HELP_FORMAT = "  \033[36m%-10s\033[0m %s\n"
 .PHONY: help
 help: ## Display this help message
