@@ -13,7 +13,10 @@ _A command-line tool to manage Python virtual environments_
 > clear instructions to migrate in the release notes. These changes will only
 > be limited to a minor release.
 >
-> I also plan to change the tool name to avoid any misunderstanding and conflict.
+> The tool was previously named `pyvenv` and got renamed to `pie` in `v0.9.0`.
+> This virtual environments created using `pyvenv` should not be migrated as is
+> because the information stored by each virtual environment still refers to
+> the name `pyvenv`.
 
 ## Overview
 
