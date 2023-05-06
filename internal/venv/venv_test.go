@@ -40,9 +40,13 @@ func TestNames(t *testing.T) {
 }
 
 func TestProjectPath(t *testing.T) {
-	venvDir := filepath.Join(testdataDir, "venv1")
+	originalDataDir := xdg.DataDir
+	xdg.DataDir = testdataDir
+	t.Cleanup(func() {
+		xdg.DataDir = originalDataDir
+	})
 
-	got, err := ProjectPath(venvDir)
+	got, err := ProjectPath("venv1")
 	if err != nil {
 		t.Fatalf("ProjectPath() error = %v, want nil", err)
 	}
@@ -54,9 +58,13 @@ func TestProjectPath(t *testing.T) {
 }
 
 func TestPythonVersion(t *testing.T) {
-	venvDir := filepath.Join(testdataDir, "venv1")
+	originalDataDir := xdg.DataDir
+	xdg.DataDir = testdataDir
+	t.Cleanup(func() {
+		xdg.DataDir = originalDataDir
+	})
 
-	got, err := PythonVersion(venvDir)
+	got, err := PythonVersion("venv1")
 	if err != nil {
 		t.Fatalf("PythonVersion() error = %v, want nil", err)
 	}

@@ -33,8 +33,8 @@ func Names() ([]string, error) {
 // ProjectPath returns the absolute path to the project this virtual
 // environment belongs to. This information is extracted from the
 // `.project` file present in the virtual environment directory.
-func ProjectPath(venvDir string) (string, error) {
-	content, err := os.ReadFile(filepath.Join(venvDir, ".project"))
+func ProjectPath(venvName string) (string, error) {
+	content, err := os.ReadFile(filepath.Join(xdg.DataDir, venvName, ".project"))
 	if err != nil {
 		return "", err
 	}
@@ -45,8 +45,8 @@ func ProjectPath(venvDir string) (string, error) {
 // PythonVersion returns the Python version this environment was created from.
 // This information is extracted from the config file present in the virtual
 // environment directory.
-func PythonVersion(venvDir string) (string, error) {
-	file, err := os.Open(filepath.Join(venvDir, "pyvenv.cfg"))
+func PythonVersion(venvName string) (string, error) {
+	file, err := os.Open(filepath.Join(xdg.DataDir, venvName, "pyvenv.cfg"))
 	if err != nil {
 		return "", err
 	}

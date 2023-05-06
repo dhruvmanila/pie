@@ -71,12 +71,11 @@ func printVenvs() {
 			line += bold.Sprint("  " + venvName)
 		}
 		if verbose {
-			venvDir := filepath.Join(xdg.DataDir, venvName)
-			projectPath, err := venv.ProjectPath(venvDir)
+			projectPath, err := venv.ProjectPath(venvName)
 			if err != nil {
 				log.Fatal(err)
 			}
-			pythonVersion, err := venv.PythonVersion(venvDir)
+			pythonVersion, err := venv.PythonVersion(venvName)
 			if err != nil {
 				log.Fatal(err)
 			}
