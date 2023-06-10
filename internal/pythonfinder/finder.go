@@ -7,6 +7,16 @@ import (
 	pep440Version "github.com/aquasecurity/go-pep440-version"
 )
 
+// finderStrategy is the strategy used by the finder to find Python executables.
+type finderStrategy int
+
+const (
+	// findAll finds all Python executables.
+	findAll finderStrategy = iota
+	// findOne finds the one Python executable matching the given version.
+	findOne
+)
+
 // finder is a Python version finder.
 type finder struct {
 	providers []Provider
@@ -25,7 +35,7 @@ func New() *finder {
 // This function returns ErrVersionNotFound if no version matching the given
 // version is found or there is no Python version installed on the system.
 func (f *finder) Find(version string) (*PythonExecutable, error) {
-	versions, err := f.find(version, 1)
+	versions, err := f.find(version, findOne)
 	if err != nil {
 		return nil, err
 	}
@@ -37,10 +47,10 @@ func (f *finder) Find(version string) (*PythonExecutable, error) {
 // FindAll returns all the Python versions available on the system which can be
 // found by the providers.
 func (f *finder) FindAll() ([]*PythonExecutable, error) {
-	return f.find("", -1)
+	return f.find("", findAll)
 }
 
-func (f *finder) find(version string, n int) ([]*PythonExecutable, error) {
+func (f *finder) find(version string, strategy finderStrategy) ([]*PythonExecutable, error) {
 	var versionInfo *pep440Version.Version
 
 	if version != "" {
@@ -91,7 +101,7 @@ ProviderLoop:
 				versions = append(versions, pythonExecutable)
 			}
 
-			if n > 0 && len(versions) == n {
+			if strategy == findOne && len(versions) == 1 {
 				break ProviderLoop
 			}
 		}
