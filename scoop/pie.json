@@ -1,19 +1,19 @@
 {
-    "version": "0.9.0",
+    "version": "0.10.0",
     "architecture": {
         "32bit": {
-            "url": "https://github.com/dhruvmanila/pie/releases/download/v0.9.0/pie-0.9.0-windows-386.zip",
+            "url": "https://github.com/dhruvmanila/pie/releases/download/v0.10.0/pie-0.10.0-windows-386.zip",
             "bin": [
                 "pie.exe"
             ],
-            "hash": "182ea7a3fb2ac1fad0e6ea97e2951941d6bc2e6f8650f12c73086bf6667ff457"
+            "hash": "a3a0993a672aa69b0bdc5f1adc17ca64ca0f0e344150a217378c7dd96f836c1e"
         },
         "64bit": {
-            "url": "https://github.com/dhruvmanila/pie/releases/download/v0.9.0/pie-0.9.0-windows-amd64.zip",
+            "url": "https://github.com/dhruvmanila/pie/releases/download/v0.10.0/pie-0.10.0-windows-amd64.zip",
             "bin": [
                 "pie.exe"
             ],
-            "hash": "1e58dcfe8d558cdd33af3777c7d8ad48c5ad00cf0446801809b108b1fa3134b6"
+            "hash": "7db0b8fe1f0d95b50782a8577b578ad50e0e02ee0934d12643e541b1503f626f"
         }
     },
     "homepage": "https://github.com/dhruvmanila/pie",
