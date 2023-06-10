@@ -1,7 +1,6 @@
 package pythonfinder
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -13,76 +12,26 @@ import (
 // Fake exec command helper
 var testCaseName string
 
-func TestVersionInfo(t *testing.T) {
-	v1 := &VersionInfo{Major: 3, Minor: 11, Patch: 0}
-	v2 := &VersionInfo{Major: 3, Minor: 11, Patch: 0}
-
-	if !v1.Matches(v2) {
-		t.Errorf("(%#v).Matches(%#v) = false, want true", v1, v2)
-	}
-
-	got := v1.String()
-	want := "3.11.0"
-	if got != want {
-		t.Errorf("(%#v).String() = %q, want %q", v1, got, want)
-	}
-}
-
-func TestGetVersionInfo_Valid(t *testing.T) {
+func TestPythonExecutable(t *testing.T) {
 	// Setup fake exec command
-	testCaseName = "TestGetVersionInfoValid"
+	testCaseName = "TestGetVersionInfo"
 	execCommand = fakeExecCommand
 	defer func() {
 		execCommand = exec.Command
 	}()
 
 	executable := "/bin/python"
-	got, err := getVersionInfo(executable)
-	if err != nil {
-		t.Fatalf("getVersionInfo(%q) unexpected error = %v", executable, err)
-	}
-
-	want := &VersionInfo{Major: 3, Minor: 11, Patch: 0}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("getVersionInfo(%q) = %#v, want %#v", executable, got, want)
-	}
-}
-
-func TestGetVersionInfo_Invalid(t *testing.T) {
-	// Setup fake exec command
-	testCaseName = "TestGetVersionInfoInvalid"
-	execCommand = fakeExecCommand
-	defer func() {
-		execCommand = exec.Command
-	}()
-
-	executable := "/bin/python"
-	_, err := getVersionInfo(executable)
-	if !errors.Is(err, ErrInvalidVersion) {
-		t.Fatalf("getVersionInfo(%q) error = %q, want = %q", executable, err, ErrInvalidVersion)
-	}
-}
-
-func TestPythonVersion(t *testing.T) {
-	// Setup fake exec command
-	testCaseName = "TestGetVersionInfoValid"
-	execCommand = fakeExecCommand
-	defer func() {
-		execCommand = exec.Command
-	}()
-
-	executable := "/bin/python"
-	got, err := newPythonVersion(executable)
+	got, err := newPythonExecutable(executable)
 	if err != nil {
 		t.Fatalf("newPythonVersion(%q) unexpected error = %q", executable, err)
 	}
 
-	want := &PythonVersion{
-		Executable:  executable,
-		VersionInfo: &VersionInfo{Major: 3, Minor: 11, Patch: 0},
+	want := "3.11.0"
+	if !reflect.DeepEqual(got.Version.String(), want) {
+		t.Errorf("newPythonExecutable(%q).Version = %q, want %q", executable, got.Version, want)
 	}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("newPythonVersion(%q) = %#v, want %#v", executable, got, want)
+	if !reflect.DeepEqual(got.Path, executable) {
+		t.Errorf("newPythonExecutable(%q).Path = %q, want %q", executable, got.Path, executable)
 	}
 }
 
@@ -112,10 +61,8 @@ func TestHelperProcess(t *testing.T) {
 	}
 
 	switch os.Getenv("GO_TEST_CASE_NAME") {
-	case "TestGetVersionInfoValid":
+	case "TestGetVersionInfo":
 		fmt.Fprintln(os.Stdout, "Python 3.11.0")
-	case "TestGetVersionInfoInvalid":
-		fmt.Fprintln(os.Stdout, "Python 3.12.0a1")
 	}
 
 	os.Exit(0)
