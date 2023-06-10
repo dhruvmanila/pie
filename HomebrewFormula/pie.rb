@@ -5,13 +5,13 @@
 class Pie < Formula
   desc "A tool for managing Python virtual environments."
   homepage "https://github.com/dhruvmanila/pie"
-  version "0.9.0"
+  version "0.10.0"
   license "MIT"
 
   on_macos do
-    if Hardware::CPU.intel?
-      url "https://github.com/dhruvmanila/pie/releases/download/v0.9.0/pie-0.9.0-darwin-amd64.tar.gz"
-      sha256 "9d59c1df6b53ec1bea7273c7042de4a8fdd5dc72eb78e1dac5222bd58dba2972"
+    if Hardware::CPU.arm?
+      url "https://github.com/dhruvmanila/pie/releases/download/v0.10.0/pie-0.10.0-darwin-arm64.tar.gz"
+      sha256 "ebdad585bb6d9238d242b9dae6e92ae1d34fad153d417838809ff631e58344c9"
 
       def install
         bin.install "pie"
@@ -20,9 +20,9 @@ class Pie < Formula
         fish_completion.install "completions/pie.fish"
       end
     end
-    if Hardware::CPU.arm?
-      url "https://github.com/dhruvmanila/pie/releases/download/v0.9.0/pie-0.9.0-darwin-arm64.tar.gz"
-      sha256 "0a97f0714eb3ba76c9e840a6ead040d99f99c1a4fca1525aa2135555d70042ba"
+    if Hardware::CPU.intel?
+      url "https://github.com/dhruvmanila/pie/releases/download/v0.10.0/pie-0.10.0-darwin-amd64.tar.gz"
+      sha256 "e10406b08271a4a3f03805a258979c7e5cb82ec0b56ae0882d474867490cce2d"
 
       def install
         bin.install "pie"
@@ -35,8 +35,8 @@ class Pie < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dhruvmanila/pie/releases/download/v0.9.0/pie-0.9.0-linux-arm64.tar.gz"
-      sha256 "168ee520c52c8161aed53c0d289c4331ae20442d924462287535ed8bf7dc17c8"
+      url "https://github.com/dhruvmanila/pie/releases/download/v0.10.0/pie-0.10.0-linux-arm64.tar.gz"
+      sha256 "77ba9b8757450572d8fd54735ed8a74197b182728da3e9fe49cac791f7af7a7f"
 
       def install
         bin.install "pie"
@@ -46,8 +46,8 @@ class Pie < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dhruvmanila/pie/releases/download/v0.9.0/pie-0.9.0-linux-amd64.tar.gz"
-      sha256 "0c4dccb0a9e3960013ffa3f9703e35c9209637bc34b4a1d760e5c1d60ad888c9"
+      url "https://github.com/dhruvmanila/pie/releases/download/v0.10.0/pie-0.10.0-linux-amd64.tar.gz"
+      sha256 "6145ef65d188d91060ad8d59989b7f3aa07a69bc9d259e22a990afa6287f9392"
 
       def install
         bin.install "pie"
