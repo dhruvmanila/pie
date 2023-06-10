@@ -49,8 +49,6 @@ The environment will be created using the builtin 'venv' module. If the
 				} else {
 					log.Fatal(red.Sprintf("✘ No Python version found!"))
 				}
-			} else if errors.Is(err, pythonfinder.ErrInvalidVersion) {
-				log.Fatal(red.Sprintf("✘ Invalid Python version: %s (expected format: <major>.<minor>.<patch>)", pythonVersion))
 			}
 			log.Fatal(err)
 		}

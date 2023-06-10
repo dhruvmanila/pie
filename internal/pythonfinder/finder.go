@@ -1,7 +1,6 @@
 package pythonfinder
 
 import (
-	"errors"
 	"os/exec"
 	"runtime"
 
@@ -74,12 +73,6 @@ ProviderLoop:
 
 			pythonExecutable, err := newPythonExecutable(executable)
 			if err != nil {
-				// The executable could come from a Python version which is not
-				// supported by this tool. In this case, we just ignore the error
-				// and continue.
-				if errors.Is(err, ErrInvalidVersion) {
-					continue
-				}
 				switch err.(type) {
 				case *exec.Error, *exec.ExitError:
 					// The file could not be classified as an executable or
