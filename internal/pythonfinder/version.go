@@ -4,57 +4,38 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
+
+	pep440Version "github.com/aquasecurity/go-pep440-version"
 )
 
 var execCommand = exec.Command
 
-// VersionInfo contains information about a Python version. It provides
-// information about the major, minor, and patch version numbers.
-type VersionInfo struct {
-	Major int
-	Minor int
-	Patch int
+// PythonExecutable contains information about a Python executable.
+type PythonExecutable struct {
+	// Version is the parsed Python version.
+	Version *pep440Version.Version
+
+	// Path is the absolute path to the Python executable.
+	Path string
 }
 
-// Matches returns true if the other version matches the current version.
-func (v *VersionInfo) Matches(other *VersionInfo) bool {
-	return v.Major == other.Major && v.Minor == other.Minor && v.Patch == other.Patch
-}
-
-func (v *VersionInfo) String() string {
-	return fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Patch)
-}
-
-// PythonVersion contains information about a Python version.
-//
-// This is similar to VersionInfo, but also contains the path to the Python
-// executable.
-type PythonVersion struct {
-	*VersionInfo
-
-	// Executable is the absolute path to the Python executable.
-	Executable string
-}
-
-// newPythonVersion creates a new PythonVersion from the given executable.
-//
-// This function returns ErrInvalidVersion if the executable Python version
-// is not supported by this tool. It also returns errors from the exec package.
-func newPythonVersion(executable string) (*PythonVersion, error) {
-	versionInfo, err := getVersionInfo(executable)
+// newPythonExecutable creates a new PythonExecutable from the given Python
+// executable path.
+func newPythonExecutable(executable string) (*PythonExecutable, error) {
+	versionInfo, err := getPythonVersion(executable)
 	if err != nil {
 		return nil, err
 	}
-	return &PythonVersion{VersionInfo: versionInfo, Executable: executable}, nil
+	return &PythonExecutable{Version: versionInfo, Path: executable}, nil
 }
 
-func (v *PythonVersion) String() string {
-	return fmt.Sprintf("%s (%s)", v.VersionInfo, v.Executable)
+func (v *PythonExecutable) String() string {
+	return fmt.Sprintf("%s (%s)", v.Version, v.Path)
 }
 
-// getVersionInfo returns the version information for the given Python
+// getPythonVersion returns the version information for the given Python
 // executable.
-func getVersionInfo(executable string) (*VersionInfo, error) {
+func getPythonVersion(executable string) (*pep440Version.Version, error) {
 	cmd := execCommand(executable, "--version")
 
 	output, err := cmd.Output()
@@ -69,10 +50,10 @@ func getVersionInfo(executable string) (*VersionInfo, error) {
 	}
 	version = strings.TrimRight(version, "\r\n")
 
-	versionInfo, err := parseVersion(version)
+	versionInfo, err := pep440Version.Parse(version)
 	if err != nil {
 		return nil, err
 	}
 
-	return versionInfo, nil
+	return &versionInfo, nil
 }

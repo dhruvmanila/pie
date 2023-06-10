@@ -48,8 +48,8 @@ func printPythonVersions() {
 	bold.Println("Found Python versions:")
 	for _, v := range versions {
 		fmt.Printf("  %s %s\n",
-			yellowBold.Sprint(v.VersionInfo),
-			faint.Sprintf("(%s)", v.Executable),
+			yellowBold.Sprint(v.Version),
+			faint.Sprintf("(%s)", v.Path),
 		)
 	}
 }

@@ -80,8 +80,8 @@ func createVenv(p *project.Project) error {
 	}
 
 	fmt.Printf("Using %s %s to create virtualenv...\n",
-		yellowBold.Sprint(v.Executable),
-		green.Sprintf("(%s)", v.VersionInfo),
+		yellowBold.Sprint(v.Path),
+		green.Sprintf("(%s)", v.Version),
 	)
 
 	// Creating the virtual environment using the 'venv' module does not
@@ -89,7 +89,7 @@ func createVenv(p *project.Project) error {
 	// if the command fails, to stderr.
 	var stderr bytes.Buffer
 
-	cmd := exec.Command(v.Executable, "-m", "venv", p.VenvDir, "--prompt", p.Name)
+	cmd := exec.Command(v.Path, "-m", "venv", p.VenvDir, "--prompt", p.Name)
 	cmd.Stderr = &stderr
 
 	if err = cmd.Start(); err != nil {

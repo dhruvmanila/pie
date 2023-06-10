@@ -4,6 +4,8 @@ import (
 	"errors"
 	"os/exec"
 	"runtime"
+
+	pep440Version "github.com/aquasecurity/go-pep440-version"
 )
 
 // finder is a Python version finder.
@@ -23,7 +25,7 @@ func New() *finder {
 //
 // This function returns ErrVersionNotFound if no version matching the given
 // version is found or there is no Python version installed on the system.
-func (f *finder) Find(version string) (*PythonVersion, error) {
+func (f *finder) Find(version string) (*PythonExecutable, error) {
 	versions, err := f.find(version, 1)
 	if err != nil {
 		return nil, err
@@ -35,22 +37,22 @@ func (f *finder) Find(version string) (*PythonVersion, error) {
 
 // FindAll returns all the Python versions available on the system which can be
 // found by the providers.
-func (f *finder) FindAll() ([]*PythonVersion, error) {
+func (f *finder) FindAll() ([]*PythonExecutable, error) {
 	return f.find("", -1)
 }
 
-func (f *finder) find(version string, n int) ([]*PythonVersion, error) {
-	var versionInfo *VersionInfo
+func (f *finder) find(version string, n int) ([]*PythonExecutable, error) {
+	var versionInfo *pep440Version.Version
 
 	if version != "" {
-		var err error
-		versionInfo, err = parseVersion(version)
+		v, err := pep440Version.Parse(version)
 		if err != nil {
 			return nil, err
 		}
+		versionInfo = &v
 	}
 
-	var versions []*PythonVersion
+	var versions []*PythonExecutable
 
 	// seen is a set of Python executables which were already seen by the
 	// providers. This is used to avoid returning duplicate Python versions.
@@ -70,7 +72,7 @@ ProviderLoop:
 			}
 			seen[executable] = struct{}{}
 
-			pythonVersion, err := newPythonVersion(executable)
+			pythonExecutable, err := newPythonExecutable(executable)
 			if err != nil {
 				// The executable could come from a Python version which is not
 				// supported by this tool. In this case, we just ignore the error
@@ -89,11 +91,11 @@ ProviderLoop:
 			}
 
 			if versionInfo != nil {
-				if pythonVersion.Matches(versionInfo) {
-					versions = append(versions, pythonVersion)
+				if pythonExecutable.Version.Equal(*versionInfo) {
+					versions = append(versions, pythonExecutable)
 				}
 			} else {
-				versions = append(versions, pythonVersion)
+				versions = append(versions, pythonExecutable)
 			}
 
 			if n > 0 && len(versions) == n {
