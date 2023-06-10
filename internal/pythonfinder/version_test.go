@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	pep440Version "github.com/aquasecurity/go-pep440-version"
 )
 
 // Fake exec command helper
@@ -66,4 +68,118 @@ func TestHelperProcess(t *testing.T) {
 	}
 
 	os.Exit(0)
+}
+
+func TestIsFinalRelease(t *testing.T) {
+	tests := []struct {
+		version string
+		want    bool
+	}{
+		{
+			version: "3.11.0",
+			want:    true,
+		},
+		{
+			version: "3.11.0a1",
+			want:    false,
+		},
+		{
+			version: "3.11.0.post1",
+			want:    false,
+		},
+		{
+			version: "3.11.0.dev1",
+			want:    false,
+		},
+		{
+			version: "3.11.0+local",
+			want:    false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.version, func(t *testing.T) {
+			v := pep440Version.MustParse(tt.version)
+			got := isFinalRelease(&v)
+			if got != tt.want {
+				t.Errorf("isFinalRelease(%q) = %v, want %v", v, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIsCompleteVersion(t *testing.T) {
+	tests := []struct {
+		version string
+		want    bool
+	}{
+		{
+			version: "3",
+			want:    false,
+		},
+		{
+			version: "3.11",
+			want:    false,
+		},
+		{
+			version: "3.11.0",
+			want:    true,
+		},
+		{
+			version: "3.11.0a1",
+			want:    false,
+		},
+		{
+			version: "3.11.0.post1",
+			want:    false,
+		},
+		{
+			version: "3.11.0.dev1",
+			want:    false,
+		},
+		{
+			version: "3.11.0+local",
+			want:    false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.version, func(t *testing.T) {
+			v := pep440Version.MustParse(tt.version)
+			got := isCompleteVersion(&v)
+			if got != tt.want {
+				t.Errorf("isCompleteVersion(%q) = %v, want %v", v, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetGlobVersion(t *testing.T) {
+	tests := []struct {
+		version string
+		want    string
+	}{
+		{
+			version: "3",
+			want:    "3.*",
+		},
+		{
+			version: "3.11",
+			want:    "3.11.*",
+		},
+		{
+			version: "3.11.0",
+			want:    "3.11.0",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.version, func(t *testing.T) {
+			v := pep440Version.MustParse(tt.version)
+			got := getGlobVersion(&v)
+			if got != tt.want {
+				t.Errorf("getGlobVersion(%q) = %v, want %v", v, got, tt.want)
+			}
+		})
+	}
 }

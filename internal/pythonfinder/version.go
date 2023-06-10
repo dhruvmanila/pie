@@ -3,6 +3,7 @@ package pythonfinder
 import (
 	"fmt"
 	"os/exec"
+	"regexp"
 	"strings"
 
 	pep440Version "github.com/aquasecurity/go-pep440-version"
@@ -56,4 +57,36 @@ func getPythonVersion(executable string) (*pep440Version.Version, error) {
 	}
 
 	return &versionInfo, nil
+}
+
+// isFinalRelease returns true if the given version is a final release, i.e.,
+// not a pre-release, post-release or developmental release.
+func isFinalRelease(version *pep440Version.Version) bool {
+	return !version.IsPreRelease() && !version.IsPostRelease() && version.Local() == ""
+}
+
+// versionRegex is a regular expression that matches Python version strings
+// of the form "X.Y.Z".
+var versionRegex = regexp.MustCompile(`^(\d)\.(\d{1,2})\.(\d{1,2})$`)
+
+// isCompleteVersion returns true if the given version is a complete version,
+// i.e., it's of the form X.Y.Z.
+//
+// This function assumes that the given version is a final release.
+func isCompleteVersion(version *pep440Version.Version) bool {
+	return versionRegex.MatchString(version.String())
+}
+
+// getGlobVersion returns the glob version for the given version if it's not
+// a complete version, otherwise it returns the given version.
+//
+// This function assumes that the given version is a final release.
+func getGlobVersion(version *pep440Version.Version) string {
+	v := version.String()
+	switch len(strings.Split(v, ".")) {
+	case 1, 2:
+		return fmt.Sprintf("%s.*", v)
+	default:
+		return v
+	}
 }
