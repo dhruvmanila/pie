@@ -3,6 +3,7 @@ package pythonfinder
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/dhruvmanila/pie/internal/pathutil"
 )
@@ -49,6 +50,10 @@ func (p *pyenvProvider) Executables() ([]string, error) {
 
 	for _, entry := range entries {
 		if !entry.IsDir() {
+			continue
+		}
+		// Skip the `dev` versions.
+		if strings.HasSuffix(entry.Name(), "dev") {
 			continue
 		}
 		binDir := filepath.Join(versionDir, entry.Name(), "bin")
