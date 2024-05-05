@@ -1,3 +1,7 @@
+> [!WARNING]
+>
+> This project is no longer maintained. Please use [`uv`](https://github.com/astral-sh/uv) instead.
+
 <div align="center">
 
 # pie
@@ -6,7 +10,7 @@ _A command-line tool to manage Python virtual environments_
 
 </div>
 
-> **Warning**
+> [!IMPORTANT]
 >
 > This tool is currently in **alpha**. There maybe breaking changes, although
 > I'll try to avoid it as much as possible and if I can't, I'll provide
